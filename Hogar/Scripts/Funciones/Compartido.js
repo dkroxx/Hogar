@@ -1,0 +1,3 @@
+﻿function Request(Metodo, Query) {
+
+}
