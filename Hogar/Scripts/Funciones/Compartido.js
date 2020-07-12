@@ -1,3 +1,48 @@
-﻿function Request(Metodo, Query) {
+﻿function Request(Query, Metodo) {
+    try {
+        var jdata = '{Query: "' + Query + '"}';
 
+        $.ajax({
+            type: "POST",
+            url: "/Home/ValidarUsuario",
+            data: jdata,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var Respuesta = JSON.parse(response);
+
+                if (Respuesta.ErrorCode == "00") {
+                    switch (Metodo) {
+                        case "InicioSesion":
+                            window.location.href = "/Home/Inicio";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    MostrarModal(Respuesta.Error);
+                }
+
+            },
+            failure: function (response) {
+                console.log("Falló: " + response);
+            },
+            error: function (response) {
+                console.log("Error: " + response);
+            }
+        });
+    } catch (e) {
+
+    }
 }
+
+function MostrarModal(Mensaje) {
+    document.getElementById('MensajeModal').innerHTML = Mensaje;
+    $('#MensajeAlerta').modal();
+    
+}
+
+$('#MensajeAlerta').on('shown.bs.modal', function () {
+    $('#myInput').trigger('focus')
+})

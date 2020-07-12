@@ -1,6 +1,8 @@
-﻿.centrar {
-    margin: auto;
-    width: 60%;
-    border: 3px solid #73AD21;
-    padding: 10px;
+﻿.headerDivider {
+    border-left: 1px solid #38546d;
+    border-right: 1px solid #16222c;
+    height: 80px;
+    position: absolute;
+    right: 249px;
+    top: 10px;
 }
