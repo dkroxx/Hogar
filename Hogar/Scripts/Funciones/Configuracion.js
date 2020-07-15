@@ -63,6 +63,12 @@ function MostrarConfigTelefono() {
     BtnAtras.style.display = "block";
 }
 
+function MostrarConfigParentesco() {
+    OcultarTablaConfig("Catálogo Parentesco");
+    EdicionGeneral.style.display = "block";
+    BtnAtras.style.display = "block";
+}
+
 function OcultarTablaConfig(Config) {
     TablaConfig.style.display = "none";    
     var txtTitulo = Titulo.innerHTML;

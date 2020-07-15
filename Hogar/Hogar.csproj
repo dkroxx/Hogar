@@ -181,6 +181,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\loading.gif" />
     <Content Include="Images\logo.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -191,6 +192,7 @@
     <Content Include="Scripts\Funciones\Compartido.js" />
     <Content Include="Scripts\Funciones\Configuracion.js" />
     <Content Include="Scripts\Funciones\IniciarSesion.js" />
+    <Content Include="Scripts\Funciones\Visitas.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
@@ -216,6 +218,9 @@
     <Content Include="Views\Home\Inicio.cshtml" />
     <Content Include="Views\Home\Configuracion.cshtml" />
     <Content Include="Views\Home\NoAutorizado.cshtml" />
+    <Content Include="Views\Home\Pacientes.cshtml" />
+    <Content Include="Views\Home\Visitas.cshtml" />
+    <Content Include="Views\Home\CerrarSesion.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

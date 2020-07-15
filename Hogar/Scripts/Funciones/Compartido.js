@@ -4,7 +4,7 @@
 
         $.ajax({
             type: "POST",
-            url: "/Home/ValidarUsuario",
+            url: `/Home/${Metodo}`,
             data: jdata,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
@@ -13,8 +13,11 @@
 
                 if (Respuesta.ErrorCode == "00") {
                     switch (Metodo) {
-                        case "InicioSesion":
+                        case "ValidarUsuario":
                             window.location.href = "/Home/Inicio";
+                            break;
+                        case "CerrarSesion":
+                            window.location.href = "/Home/IniciarSesion";
                             break;
                         default:
                             break;
@@ -22,6 +25,14 @@
                 }
                 else {
                     MostrarModal(Respuesta.Error);
+                    switch (Metodo) {
+                        case "ValidarUsuario":
+                            document.getElementById('btnIngresar').style.display = "block";
+                            document.getElementById('loading').style.display = "none";
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
             },

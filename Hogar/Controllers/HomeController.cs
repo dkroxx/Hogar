@@ -36,11 +36,50 @@ namespace Hogar.Controllers
             }
         }
 
+        public ActionResult Pacientes()
+        {
+            if (Session["Usuario"] != null)
+            {
+                if (Session["Pacientes"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("NoAutorizado");
+                }
+            }
+            else
+            {
+                return RedirectToAction("IniciarSesion");
+            }
+        }
+
+        public ActionResult Visitas()
+        {
+            if (Session["Usuario"] != null)
+            {
+                if (Session["Visitas"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("NoAutorizado");
+                }
+            }
+            else
+            {
+                return RedirectToAction("IniciarSesion");
+            }
+        }
+
+
         public ActionResult Configuracion()
         {
             if (Session["Usuario"] != null)
             {
-                if (Session["Rol"].ToString() != "3")
+                if (Session["Configuracion"].ToString() == "1")
                 {
                     return View();
                 }
@@ -67,6 +106,18 @@ namespace Hogar.Controllers
             }
         }
 
+        public ActionResult CerrarSesion()
+        {
+            if (Session["Usuario"] != null)
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("IniciarSesion");
+            }
+        }
+
         #endregion
 
         #region MetodosHttp
@@ -78,12 +129,39 @@ namespace Hogar.Controllers
             try
             {
                 ConsultarSql(Query, "InicioSesion");
+                if (Session["Usuario"] == null)
+                {
+                    throw new Exception(msj.ErrorUsuario);
+                }
                 JsonResponse = "{\"ErrorCode\":\"00\",\"Mensaje\":\"" + Session["Usuario"] + "\"}";
-
             }
             catch (Exception ex)
             {
                 JsonResponse = "{\"ErrorCode\":\"99\",\"Error\":\"" + ex.Message + "\"}";                
+            }
+
+            return Json(JsonResponse);
+        }
+
+        [HttpPost]
+        public JsonResult CerrarSesion(string Query)
+        {
+            string JsonResponse = string.Empty;
+            try
+            {
+                var Usuario = Session["Usuario"].ToString();
+                Session["Usuario"] = null;
+                Session["Nombre"] = null;
+                Session["Pacientes"] = null;
+                Session["Visitas"] = null;
+                Session["Configuracion"] = null;
+
+                JsonResponse = "{\"ErrorCode\":\"00\",\"Mensaje\":\"" + string.Format(msj.CerrarSesion, Usuario) + "\"}";
+
+            }
+            catch (Exception ex)
+            {
+                JsonResponse = "{\"ErrorCode\":\"99\",\"Error\":\"" + ex.Message + "\"}";
             }
 
             return Json(JsonResponse);
@@ -107,15 +185,11 @@ namespace Hogar.Controllers
                     switch (Metodo)
                     {
                         case "InicioSesion":
-                            if (!string.IsNullOrEmpty(reader.GetString(0)))
-                            {
-                                Session["Usuario"] = reader.GetString(0);
-                                Session["Rol"] = reader.GetString(1);
-                            }
-                            else
-                            {
-                                throw new Exception(msj.ErrorUsuario);
-                            }
+                            Session["Usuario"] = reader.GetString(0);
+                            Session["Nombre"] = string.Format("{0} {1}", reader.GetString(1), reader.GetString(2));
+                            Session["Pacientes"] = reader.GetString(3);
+                            Session["Visitas"] = reader.GetString(4);
+                            Session["Configuracion"] = reader.GetString(5);
                             break;
                         default:
                             break;
@@ -143,7 +217,8 @@ namespace Hogar.Controllers
     public class Mensaje
     {
         public string ErrorConexion = "Ha ocurrido un problema al conectarse con la base de datos.";
-        public string ErrorUsuario = "El usuario es incorrecto o se encuentra inactivo.";
+        public string ErrorUsuario = "El usuario es incorrecto o se encuentra inactivo.";        
+        public string CerrarSesion = "La sesión de {0} ha sido cerrada correctamente.";
     }
 
     public class DBConnection
@@ -188,6 +263,7 @@ namespace Hogar.Controllers
 
         public void Close()
         {
+            _instance = null;            
             connection.Close();
         }
     }
