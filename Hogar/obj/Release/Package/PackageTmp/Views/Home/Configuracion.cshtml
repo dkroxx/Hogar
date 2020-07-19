@@ -20,38 +20,43 @@
                 <tr>
                     <th>Usuarios</th>
                     <td>Permite agregar y modificar usuarios al sistema.</td>
-                    <td><button type="submit" class="btn btn-default" onclick="MostrarConfigUsuario()">Modificar</button></td>
+                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigUsuario()">Modificar</button></td>
                 </tr>
                 <tr>
                     <th>Catálogo Rol</th>
                     <td>Permite agregar y modificar el catálogo de roles.</td>
-                    <td><button type="submit" class="btn btn-default" onclick="MostrarConfigRol()">Modificar</button></td>
+                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigRol()">Modificar</button></td>
                 </tr>
                 <tr>
                     <th>Catálogo Articulo</th>
                     <td>Permite agregar y modificar el catálogo de articulos.</td>
-                    <td><button type="submit" class="btn btn-default" onclick="MostrarConfigArticulo()">Modificar</button></td>
+                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigArticulo()">Modificar</button></td>
                 </tr>
                 <tr>
                     <th>Catálogo Teléfono</th>
                     <td>Permite agregar y modificar el catálogo de telefonos.</td>
-                    <td><button type="submit" class="btn btn-default" onclick="MostrarConfigTelefono()">Modificar</button></td>
+                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigTelefono()">Modificar</button></td>
+                </tr>
+                <tr>
+                    <th>Catálogo Parentesco</th>
+                    <td>Permite agregar y modificar el catálogo de parenteso.</td>
+                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigParentesco()">Modificar</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div class="col-lg-6" align="left">
+    <div class="col-lg-1" align="left">
         <button id="btnAtras" type="button" class="btn btn-default" onclick="OcultarFormularios()" style="margin:10px; display:none;">Volver</button>
     </div>
-    <div class="col-lg-6" align="right">
+    <div class="col-lg-11" align="left">
         <button id="btnCrear" type="button" class="btn btn-success" onclick="AgregarPersona()" style="margin:10px; display:none;">Agregar usuario</button>
     </div>
 
     <div id="EdicionGeneral" style="display: none;" class="col-lg-12">
         <div class="col-lg-12">
             <h4 style="margin-top:25px;">Agregar un registro</h4>
-            <form class="form-inline">
+            <form class="form-inline" style="margin-bottom:5px;">
                 <div class="col-lg-4" align="center">
                     <div class="form-group">
                         <label for="DescripcionGeneral">Descripcion: </label>
@@ -82,14 +87,8 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th>Usuario</th>
-                        <td>Permite agregar y modificar usuarios al sistema.</td>
-                        <td><button type="submit" class="btn btn-default" onclick="Validar()">Modificar</button></td>
-                        <td><button type="submit" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
-                    </tr>
-                    <tr>
-                        <th>Catálogo Rol</th>
-                        <td>Permite agregar y modificar el catálogo de roles.</td>
+                        <th>1</th>
+                        <td>Descripcion del catálogo</td>
                         <td><button type="submit" class="btn btn-default" onclick="Validar()">Modificar</button></td>
                         <td><button type="submit" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
                     </tr>
@@ -106,6 +105,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">Usuario</th>
+                        <th scope="col">Nombre</th>
                         <th scope="col">Rol</th>
                         <th scope="col" colspan="2">Acciones</th>
                     </tr>
@@ -113,8 +113,9 @@
                 <tbody>
                     <tr>
                         <th>1</th>
-                        <td>88888888</td>
-                        <td>Hogar</td>
+                        <td>Usuario</td>
+                        <td>Jane Doe</td>
+                        <td>Admin</td>
                         <td><button type="submit" class="btn btn-default" onclick="Validar()">Modificar</button></td>
                         <td><button type="submit" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
                     </tr>

@@ -25,6 +25,14 @@
                 }
                 else {
                     MostrarModal(Respuesta.Error);
+                    switch (Metodo) {
+                        case "ValidarUsuario":
+                            document.getElementById('btnIngresar').style.display = "block";
+                            document.getElementById('loading').style.display = "none";
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
             },

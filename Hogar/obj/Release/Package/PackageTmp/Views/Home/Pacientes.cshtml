@@ -1,7 +1,97 @@
 ﻿
 @{
-    ViewBag.Title = "Pacientes";
+    ViewBag.Title = "Residentes";
 }
 
-<h3>Pacientes</h3>
+<h3 id="TituloConfig">Residentes / Lista de residentes</h3>
 <hr />
+
+<ul class="nav nav-tabs">
+    <li id="tbPacientes" onclick="clickPacientes()" class="active"><a>Residentes</a></li>
+    <li id="tbParientes" onclick="clickParientes()"><a>Parientes</a></li>
+    <li id="tbAsistentes" onclick="clickAsistentes()"><a>Asistentes</a></li>    
+</ul>
+
+<div class="col-lg-12">
+    <div id="MarcoPacientes" class="col-lg-12">
+        <div id="tblPaciente">
+            <h4 style="margin-top:25px;">Residentes registrados</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col">Fecha ingreso</th>
+                        <th scope="col">Asistente</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <td>101110111</td>
+                        <td>Gonzalo Madril</td>
+                        <td>10-08-2020</td>
+                        <td>Marta Solano</td>
+                        <td><button type="submit" class="btn btn-success" onclick="">Modificar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="MarcoParientes" class="col-lg-12" style="display:none;">
+        <div id="tblPariente">
+            <h4 style="margin-top:25px;">Parientes registrados</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col">Telefono</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <td>101110111</td>
+                        <td>Noelia Segura</td>
+                        <td>88888888</td>
+                        <td><button type="submit" class="btn btn-success" onclick="">Modificar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="MarcoAsistentes" class="col-lg-12" style="display:none;">
+        <div id="tblAsistentes">
+            <h4 style="margin-top:25px;">Asistentes registrados</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col">Entrada</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <td>101110111</td>
+                        <td>Noelia Segura</td>
+                        <td>10:00 am</td>
+                        <td><button type="submit" class="btn btn-success" onclick="">Modificar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/Funciones/Pacientes.js"></script>

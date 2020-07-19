@@ -74,6 +74,24 @@ namespace Hogar.Controllers
             }
         }
 
+        public ActionResult Asistentes()
+        {
+            if (Session["Usuario"] != null)
+            {
+                if (Session["Asistentes"].ToString() == "1")
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("NoAutorizado");
+                }
+            }
+            else
+            {
+                return RedirectToAction("IniciarSesion");
+            }
+        }
 
         public ActionResult Configuracion()
         {
@@ -185,11 +203,13 @@ namespace Hogar.Controllers
                     switch (Metodo)
                     {
                         case "InicioSesion":
-                            Session["Usuario"] = reader.GetString(0);
-                            Session["Nombre"] = string.Format("{0} {1}", reader.GetString(1), reader.GetString(2));
-                            Session["Pacientes"] = reader.GetString(3);
-                            Session["Visitas"] = reader.GetString(4);
-                            Session["Configuracion"] = reader.GetString(5);
+                            Session["IdUsuario"] = reader.GetString(0);
+                            Session["Usuario"] = reader.GetString(1);
+                            Session["Nombre"] = string.Format("{0} {1}", reader.GetString(2), reader.GetString(3));
+                            Session["Pacientes"] = reader.GetString(4);
+                            Session["Visitas"] = reader.GetString(5);
+                            Session["Configuracion"] = reader.GetString(6);
+                            Session["Asistentes"] = reader.GetString(7);
                             break;
                         default:
                             break;

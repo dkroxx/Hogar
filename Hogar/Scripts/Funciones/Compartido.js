@@ -51,7 +51,6 @@
 function MostrarModal(Mensaje) {
     document.getElementById('MensajeModal').innerHTML = Mensaje;
     $('#MensajeAlerta').modal();
-    
 }
 
 $('#MensajeAlerta').on('shown.bs.modal', function () {
