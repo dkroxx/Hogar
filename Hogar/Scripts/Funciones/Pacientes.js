@@ -4,7 +4,6 @@ var tbAsistentes = document.getElementById('tbAsistentes');
 var Titulo = document.getElementById('TituloConfig');
 var tblPacientes = document.getElementById('MarcoPacientes');
 var tblParientes = document.getElementById('MarcoParientes');
-var tblAsistentes = document.getElementById('MarcoAsistentes');
 
 var InfoPersona = document.getElementById('InfoPersona');
 var InfoTelefono = document.getElementById('InfoTelefono');
@@ -31,23 +30,14 @@ function AgregarPariente(num) {
     AgregarPersona();
 }
 
-function AgregarAsistente(num) {
-    Indice = num;
-    CambiarTitulo("Residentes / Lista de asistentes / Agregar asistente");
-    AgregarPersona();
-}
-
 function FinalizarRegistro() {
     if (Indice != 0) {
         switch (Indice) {
             case 1:
-                clickPacientes()
+                clickPacientes();
                 break;
             case 2:
-                clickParientes()
-                break;
-            case 3:
-                clickAsistentes()
+                clickParientes();
                 break;
             default:
                 clickPacientes();
@@ -75,10 +65,6 @@ function GuardarPersona() {
                 //LOGICA PARA GUARDAR PARIENTE
                 AgregarTelefono();
                 break;
-            case 3:
-                //LOGICA PARA GUARDAR ASISTENTE
-                AgregarTelefono();
-                break;
             default:
                 break;
         }
@@ -102,9 +88,6 @@ function GuardarTelefono() {
             case 2:
                 //LOGICA PARA GUARDAR PARIENTE
                 break;
-            case 3:
-                //LOGICA PARA GUARDAR ASISTENTE
-                break;
             default:
                 break;
         }
@@ -124,10 +107,6 @@ function ContinuarTelefono() {
             case 2:
                 //LOGICA PARA GUARDAR PARIENTE
                 clickParientes();
-                break;
-            case 3:
-                //LOGICA PARA GUARDAR ASISTENTE                
-                AgregarNuevoAsistente()
                 break;
             default:
                 break;
@@ -168,15 +147,6 @@ function BuscarPariente() {
 
 }
 
-function AgregarNuevoAsistente() {
-    OcultarTodo();
-    InfoAsistente.style.display = "block";
-}
-
-function GuardarAsistente() {
-    clickAsistentes();
-}
-
 function AgregarNuevoPariente() {
     OcultarTodo();
     InfoPariente.style.display = "block";
@@ -185,13 +155,10 @@ function AgregarNuevoPariente() {
 function OcultarTodo() {
     tblPacientes.style.display = "none";
     tblParientes.style.display = "none";
-    tblAsistentes.style.display = "none";
-
     InfoPersona.style.display = "none";
     InfoTelefono.style.display = "none";
     InfoExpediente.style.display = "none";
     InfoArticulo.style.display = "none";
-    InfoAsistente.style.display = "none";
     InfoVisitante.style.display = "none";
 }
 
@@ -211,18 +178,9 @@ function clickParientes() {
     tblParientes.style.display = "block";
 }
 
-function clickAsistentes() {
-    QuitarClase();
-    tbAsistentes.className = "active";
-    CambiarTitulo("Residentes / Lista de asistentes");
-    OcultarTodo()
-    tblAsistentes.style.display = "block";
-}
-
 function QuitarClase() {
     tbPacientes.className = "";
     tbParientes.className = "";
-    tbAsistentes.className = "";
 }
 
 function CambiarTitulo(Texto) {

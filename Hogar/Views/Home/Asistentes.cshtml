@@ -3,5 +3,267 @@
     ViewBag.Title = "Asistentes";
 }
 
-<h2>Asistentes</h2>
+<h3 id="TituloConfig">Asistentes / Lista de asistentes</h3>
+<hr />
 
+<ul class="nav nav-tabs">
+    <li id="tbAsistente" onclick="clickAsistente()" class="active"><a>Asistentes</a></li>
+    <li id="tbAsignar" onclick="clickAsignarAsistente()"><a>Asignar asistentes</a></li>
+</ul>
+
+<div class="col-lg-12">
+    <div id="MarcoAsistentes" class="col-lg-12" style="display: block;">
+        <div class="col-lg-12" align="left">
+            <button id="btnCrearAsistente" type="button" class="btn btn-success" onclick="AgregarPersona()" style="margin-top:25px;">Agregar asistente</button>
+        </div>
+        <div id="tblAsistentes" class="col-lg-12" style="margin-top:10px;">
+            <h4>Asistentes registrados</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col">Entrada</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <td>101110111</td>
+                        <td>Noelia Segura</td>
+                        <td>10:00 am</td>
+                        <td><button type="button" class="btn btn-success" onclick="">Modificar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="MarcoAsignar" class="col-lg-12" style="display: none; margin-top:25px;">
+
+        <div id="TablaResidente" class="col-lg-12" style="margin-top:10px;">
+            <h4>Residentes registrados</h4>
+            <form class="form-inline" style="margin-top: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label for="BuscarResidente">Buscar residente: </label>
+                    <input type="text" class="form-control" id="BuscarResidente">
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-default" onclick="BuscarPariente()">Buscar</button>
+                </div>
+            </form>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col">Fecha ingreso</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <td>101110111</td>
+                        <td>Gonzalo Madril</td>
+                        <td>10-08-2020</td>
+                        <td><button type="button" class="btn btn-success" onclick="ProcesosAsignar()">Seleccionar</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="AccionAsignacion" style="display:none;">
+            <div id="TablaAsistentes" class="col-lg-6" style="margin-top:10px;">
+                <h4>Lista de asistentes</h4>
+                <form class="form-inline" style="margin-top:15px; margin-bottom:10px;">
+                    <div class="form-group">
+                        <label for="BuscarAsistente">Buscar asistente: </label>
+                        <input type="text" class="form-control" id="BuscarAsistente">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default" onclick="BuscarPariente()">Buscar</button>
+                    </div>
+                </form>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Cedula</th>
+                            <th scope="col">Nombre completo</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <td>101110111</td>
+                            <td>Noelia Segura</td>
+                            <td>Enfermera</td>
+                            <td>
+                                <button type="button" class="btn btn-success" onclick="">Asignar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="TablaAsignados" class="col-lg-6" style="margin-top:10px;">
+                <h4>Asistentes asignados</h4>
+                <div class="form-inline" style="margin-top:15px; margin-bottom:10px;">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" onclick="">Guardar</button>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Cedula</th>
+                            <th scope="col">Nombre completo</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <td>101110111</td>
+                            <td>Noelia Segura</td>
+                            <td>Enfermera</td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="">Eliminar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="MarcoRegistro" class="col-lg-12">
+        <div id="InfoPersona" class="col-lg-12" align="center" style="display: none; margin-top:10px;">
+            <h4 style="text-align:left;">Formulario del información personal</h4>
+            <form>
+                <div class="form-group">
+                    <label for="Cedula">Cédula</label>
+                    <input type="text" class="form-control" id="Cedula">
+                </div>
+                <div class="form-group">
+                    <label for="Nombre">Nombre</label>
+                    <input type="text" class="form-control" id="Nombre">
+                </div>
+                <div class="form-group">
+                    <label for="Apellido1">Apellido 1</label>
+                    <input type="text" class="form-control" id="Apellido1">
+                </div>
+                <div class="form-group">
+                    <label for="Apellido2">Apellido 2</label>
+                    <input type="text" class="form-control" id="Apellido2">
+                </div>
+                <div class="form-group">
+                    <label for="Estado">Estado:</label>
+                    <input class="form-check-input" type="checkbox" id="Estado">
+                    <label class="form-check-label" for="Estado">Activo</label>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="FinalizarRegistro()">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="RegistrarPersona()">Continuar</button>
+            </form>
+        </div>
+
+        <div id="InfoTelefono" style="display: block; margin-top:10px; display:none;">
+            <div id="I" class="col-lg-12">
+                <h4>Formulario de información de contacto</h4>
+                <form>
+                    <div class="form-group" align="center">
+                        <label for="NumeroTel">Teléfono</label>
+                        <input type="text" class="form-control" id="NumeroTel">
+                    </div>
+                    <div class="form-group" align="center">
+                        <label for="TipoTelefono">Tipo teléfono</label>
+                        <select class="form-control" id="TipoTelefono">
+                            <option>Default</option>
+                        </select>
+                    </div>
+                    <div class="form-group" align="center">
+                        <label for="EstadoTelefono">Estado</label>
+                        <input class="form-check-input" type="checkbox" id="EstadoTelefono">
+                        <label class="form-check-label" for="EstadoTelefono">Activo</label>
+                    </div>
+                    <div class="form-group" align="center">
+                        <button type="button" class="btn btn-success" onclick="RegistrarTelefono()">Agregar</button>
+                        <button type="button" class="btn btn-default" onclick="ContinuarTelefono()">Continuar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-12">
+                <h4 style="margin-top:10px;">Lista de contactos</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Teléfonon</th>
+                            <th scope="col">Tipo teléfono</th>
+                            <th scope="col" colspan="2">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <td>88888888</td>
+                            <td>Hogar</td>
+                            <td><button type="button" class="btn btn-default" onclick="Validar()">Modificar</button></td>
+                            <td><button type="button" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="InfoAsistente" class="col-lg-12" style="display: none; margin-top:10px;">
+            <h4>Formulario de registro de asistentes</h4>
+            <form>
+                <div class="form-group" align="center">
+                    <label for="TipoAsistente">Tipo asistente</label>
+                    <select class="form-control" id="TipoAsistente">
+                        <option>Default</option>
+                    </select>
+                </div>
+                <div class="form-group" align="center">
+                    <label for="FechIngreso">Ingreso</label>
+                    <input class="form-control" type="date" id="FechIngreso" name="trip-start"
+                           value="2018-07-22"
+                           min="2018-01-01" max="2018-12-31">
+                </div>
+                <div class="form-group" align="center">
+                    <label for="FechEntrada">Entrada</label>
+                    <input class="form-control" type="date" id="FechEntrada" name="trip-start"
+                           value="2018-07-22"
+                           min="2018-01-01" max="2018-12-31">
+                </div>
+                <div class="form-group" align="center">
+                    <label for="FechSalida">Salida</label>
+                    <input class="form-control" type="date" id="FechSalida" name="trip-start"
+                           value="2018-07-22"
+                           min="2018-01-01" max="2018-12-31">
+                </div>
+                <div class="form-group" align="center">
+                    <label for="EstadoAsistente">Estado: </label>
+                    <input class="form-check-input" type="checkbox" id="EstadoAsistente">
+                    <label class="form-check-label" for="EstadoAsistente">Activo</label>
+                </div>
+                <div class="form-group" align="center">
+                    <button type="button" class="btn btn-success" onclick="GuardarAsistente()">Guardar</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/Scripts/Funciones/Asistentes.js"></script>

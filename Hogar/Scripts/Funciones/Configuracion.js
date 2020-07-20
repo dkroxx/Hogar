@@ -102,6 +102,12 @@ function MostrarConfigParentesco() {
     BtnAtras.style.display = "block";
 }
 
+function MostrarConfigAsistente() {
+    OcultarTablaConfig("Catálogo Asistente");
+    EdicionGeneral.style.display = "block";
+    BtnAtras.style.display = "block";
+}
+
 function OcultarTablaConfig(Config) {
     TablaConfig.style.display = "none";    
     var txtTitulo = Titulo.innerHTML;

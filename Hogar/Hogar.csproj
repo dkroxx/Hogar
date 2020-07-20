@@ -189,6 +189,7 @@
     <None Include="Properties\PublishProfiles\hogar - ReadOnly - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\hogar - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
+    <Content Include="Scripts\Funciones\Asistentes.js" />
     <Content Include="Scripts\Funciones\Compartido.js" />
     <Content Include="Scripts\Funciones\Configuracion.js" />
     <Content Include="Scripts\Funciones\IniciarSesion.js" />

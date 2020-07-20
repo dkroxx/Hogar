@@ -9,7 +9,6 @@
 <ul class="nav nav-tabs">
     <li id="tbPacientes" onclick="clickPacientes()" class="active"><a>Residentes</a></li>
     <li id="tbParientes" onclick="clickParientes()"><a>Parientes</a></li>
-    <li id="tbAsistentes" onclick="clickAsistentes()"><a>Asistentes</a></li>    
 </ul>
 
 <div class="col-lg-12">
@@ -66,35 +65,6 @@
                         <td>101110111</td>
                         <td>Noelia Segura</td>
                         <td>88888888</td>
-                        <td><button type="button" class="btn btn-success" onclick="">Modificar</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="MarcoAsistentes" class="col-lg-12" style="display:none;">
-        <div class="col-lg-12" align="left">
-            <button id="btnCrearAsistente" type="button" class="btn btn-success" onclick="AgregarAsistente(3)" style="margin-top:25px;">Agregar asistente</button>
-        </div>
-        <div id="tblAsistentes" class="col-lg-12" style="margin-top:10px;">            
-            <h4>Asistentes registrados</h4>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Cedula</th>
-                        <th scope="col">Nombre completo</th>
-                        <th scope="col">Entrada</th>
-                        <th scope="col">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th>1</th>
-                        <td>101110111</td>
-                        <td>Noelia Segura</td>
-                        <td>10:00 am</td>
                         <td><button type="button" class="btn btn-success" onclick="">Modificar</button></td>
                     </tr>
                 </tbody>
@@ -198,12 +168,6 @@
                            min="2018-01-01" max="2018-12-31">
                 </div>
                 <div class="form-group" align="center">
-                    <label for="AsistenteAsig">Asistente a cargo</label>
-                    <select class="form-control" id="AsistenteAsig">
-                        <option>Default</option>
-                    </select>
-                </div>
-                <div class="form-group" align="center">
                     <label for="EstadoExp">Estado</label>
                     <input class="form-check-input" type="checkbox" id="EstadoExp">
                     <label class="form-check-label" for="EstadoExpo">Activo</label>
@@ -263,35 +227,9 @@
             </div>
         </div>
 
-        <div id="InfoAsistente" class="col-lg-12" style="display: none; margin-top:10px;">
-            <h4>Formulario de registro de asistentes</h4>
-            <form>
-                <div class="form-group" align="center">
-                    <label for="TipoAsistente">Tipo asistente</label>
-                    <select class="form-control" id="TipoAsistente">
-                        <option>Default</option>
-                    </select>
-                </div>
-                <div class="form-group" align="center">
-                    <label for="FechaIngAsis">Horario de entrada</label>
-                    <input class="form-control" type="date" id="FechaIngAsis" name="trip-start"
-                           value="2018-07-22"
-                           min="2018-01-01" max="2018-12-31">
-                </div>
-                <div class="form-group" align="center">
-                    <label for="EstadoAsistente">Estado: </label>
-                    <input class="form-check-input" type="checkbox" id="EstadoAsistente">
-                    <label class="form-check-label" for="EstadoAsistente">Activo</label>
-                </div>
-                <div class="form-group" align="center">
-                    <button type="button" class="btn btn-success" onclick="GuardarAsistente()">Guardar</button>
-                </div>
-            </form>
-        </div>
-
         <div id="InfoVisitante" class="col-lg-12" style="display: none; margin-top:10px;">
             <h4>Parientes del residente</h4>
-            <div id="" class="col-lg-6">
+            <div class="col-lg-6">
                 <form class="form-inline">
                     <div class="col-lg-4" align="left">
                         <button type="button" class="btn btn-success" onclick="IrPariente()">Ir a parientes</button>

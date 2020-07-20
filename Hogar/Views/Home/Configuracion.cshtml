@@ -43,6 +43,11 @@
                     <td>Permite agregar y modificar el catálogo de parenteso.</td>
                     <td><button type="button" class="btn btn-success" onclick="MostrarConfigParentesco()">Modificar</button></td>
                 </tr>
+                <tr>
+                    <th>Catálogo Asistente</th>
+                    <td>Permite agregar y modificar el catálogo de asistentes.</td>
+                    <td><button type="button" class="btn btn-success" onclick="MostrarConfigAsistente()">Modificar</button></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -58,21 +63,17 @@
     <div id="EdicionGeneral" style="display: none; margin-top:10px;" class="col-lg-12">
         <div class="col-lg-12">
             <h4>Agregar un registro</h4>
-            <form class="form-inline" style="margin-bottom:5px;">
-                <div class="col-lg-4" align="left">
-                    <div class="form-group">
-                        <label for="DescripcionGeneral">Descripcion: </label>
-                        <input type="text" class="form-control" id="DescripcionGeneral">
-                    </div>
+            <form style="margin-bottom:5px;">
+                <div class="form-group" align="center">
+                    <label for="DescripcionGeneral">Descripcion: </label>
+                    <input type="text" class="form-control" id="DescripcionGeneral">
                 </div>
-                <div class="col-lg-2" align="left">
-                    <div class="form-group">
-                        <label for="EstadoGeneral">Estado: </label>
-                        <input class="form-check-input" type="checkbox" id="EstadoGeneral">
-                        <label class="form-check-label" for="EstadoGeneral">Activo</label>
-                    </div>
+                <div class="form-group" align="center">
+                    <label for="EstadoGeneral">Estado: </label>
+                    <input class="form-check-input" type="checkbox" id="EstadoGeneral">
+                    <label class="form-check-label" for="EstadoGeneral">Activo</label>
                 </div>
-                <div class="col-lg-6" align="left">
+                <div class="form-group" align="center">
                     <button type="button" class="btn btn-success">Guardar</button>
                 </div>
             </form>
@@ -105,27 +106,34 @@
             <h4 text-align:left;">Agregar rol</h4>
             <form class="col-lg-12" align="center">
                 <div class="form-group" align="center">
-                    <label for="NomRol">Cédula</label>
+                    <label for="NomRol">Descripción</label>
                     <input type="text" class="form-control" id="NomRol">
                 </div>
                 <div class="form-group" align="center">
                     <label for="PerResidente">Permisos</label>
-                    <label for="PerResidente">Residentes</label>
+                    <label for="PerResidente">Acceso a residentes</label>
                     <select class="form-control" id="PerResidente">
                         <option>Permitir</option>
                         <option>Bloquear</option>
                     </select>
                 </div>
                 <div class="form-group" align="center">
-                    <label for="PerVisitas">Visitas</label>
+                    <label for="PerAsistente">Acceso a asistentes</label>
+                    <select class="form-control" id="PerAsistente">
+                        <option>Permitir</option>
+                        <option>Bloquear</option>
+                    </select>
+                </div>
+                <div class="form-group" align="center">
+                    <label for="PerVisitas">Acceso a visitas</label>
                     <select class="form-control" id="PerVisitas">
                         <option>Permitir</option>
                         <option>Bloquear</option>
                     </select>
                 </div>
                 <div class="form-group" align="center">
-                    <label for="Configuraciones">Configuraciones</label>
-                    <select class="form-control" id="Configuraciones">
+                    <label for="PerConfiguraciones">Acceso a configuraciones</label>
+                    <select class="form-control" id="PerConfiguraciones">
                         <option>Permitir</option>
                         <option>Bloquear</option>
                     </select>
@@ -148,6 +156,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Descripción</th>
                         <th scope="col">Residentes</th>
+                        <th scope="col">Asistentes</th>
                         <th scope="col">Visitas</th>
                         <th scope="col">Configuraciones</th>
                         <th scope="col" colspan="2">Accion</th>
@@ -157,6 +166,7 @@
                     <tr>
                         <th>1</th>
                         <td>Admin</td>
+                        <td>Permitir</td>
                         <td>Permitir</td>
                         <td>Permitir</td>
                         <td>Permitir</td>
@@ -226,29 +236,23 @@
         <div id="InfoTelefono" style="display: none; margin-top:10px;">
             <div class="col-lg-12">
                 <h4>Información de contacto</h4>
-                <form class="form-inline">
-                    <div class="col-lg-4" align="center">
-                        <div class="form-group mb-2">
-                            <label for="NumeroTel">Teléfono</label>
-                            <input type="text" class="form-control" id="NumeroTel">
-                        </div>
+                <form >
+                    <div class="form-group" align="center">
+                        <label for="NumeroTel">Teléfono</label>
+                        <input type="text" class="form-control" id="NumeroTel">
                     </div>
-                    <div class="col-lg-3" align="center">
-                        <div class="form-group mb-2">
-                            <label for="TipoTelefono">Tipo teléfono</label>
-                            <select class="form-control" id="TipoTelefono">
-                                <option>Default</option>
-                            </select>
-                        </div>
+                    <div class="form-group" align="center">
+                        <label for="TipoTelefono">Tipo teléfono</label>
+                        <select class="form-control" id="TipoTelefono">
+                            <option>Default</option>
+                        </select>
                     </div>
-                    <div class="col-lg-2" align="center">
-                        <div class="form-group mb-2">
-                            <label for="EstadoTelefono">Estado</label>
-                            <input class="form-check-input" type="checkbox" id="EstadoTelefono">
-                            <label class="form-check-label" for="EstadoTelefono">Activo</label>
-                        </div>
+                    <div class="form-group" align="center">
+                        <label for="EstadoTelefono">Estado</label>
+                        <input class="form-check-input" type="checkbox" id="EstadoTelefono">
+                        <label class="form-check-label" for="EstadoTelefono">Activo</label>
                     </div>
-                    <div class="col-lg-3" align="center">
+                    <div class="form-group" align="center">
                         <button type="button" class="btn btn-success" onclick="">Agregar</button>
                         <button type="button" class="btn btn-default" onclick="AgregarUsuario()">Continuar</button>
                     </div>
@@ -284,15 +288,15 @@
             <form>
                 <div class="form-group">
                     <label for="Usuario">Usuario</label>
-                    <input type="text" class="form-control" id="Usuario">
+                    <input type="text" class="form-control" id="Usuario" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="Contrasena">Contraseña</label>
-                    <input type="password" class="form-control" id="Contrasena">
+                    <input type="password" class="form-control" id="Contrasena" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="ContrasenaRepita">Repita la contraseña</label>
-                    <input type="password" class="form-control" id="ContrasenaRepita">
+                    <input type="password" class="form-control" id="ContrasenaRepita" autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label for="Rol">Rol</label>
