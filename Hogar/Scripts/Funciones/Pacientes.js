@@ -12,11 +12,89 @@ var InfoArticulo = document.getElementById('InfoArticulo');
 var InfoAsistente = document.getElementById('InfoAsistente');
 var InfoPariente = document.getElementById('InfoVisitante');
 
+//CAMPOS DE REGISTRO DE INFORMACION PERSONAL
+var txtCedula = document.getElementById('Cedula');
+var txtNombre = document.getElementById('Nombre');
+var txtApellido1 = document.getElementById('Apellido1');
+var txtApellido2 = document.getElementById('Apellido2');
+var chkEstadoPersona = document.getElementById('EstadoPersona');
+
 var Indice = 0;
 
 //INDICE = 1 -> RESIDENTE
 //INDICE = 2 -> PARIENTE
 //INDICE = 3 -> ASISTENTE
+
+function AgregarNuevaPersona() {
+    //VALIDAR TXT AQUI
+
+    if (Indice != 0) {
+        switch (Indice) {
+            case 1:
+                //LOGICA PARA GUARDAR RESIDENTE
+
+                break;
+            case 2:
+                //LOGICA PARA GUARDAR PARIENTE
+
+                break;
+            default:
+                break;
+        }
+    }
+    else {
+        //AGREGAR ALERTA CUANDO NO SE DEFINIO NUM
+    }
+
+    AgregarTelefono();
+}
+
+//CAMPOS DE REGISTRO DE TELEFONO
+var txtNumTelefono = document.getElementById('NumeroTel');
+var cmbTipoTel = document.getElementById('TipoTelefono');
+var chkEstadoTelefono = document.getElementById('EstadoTelefono');
+
+function GuardarTelefono() {
+    //VALIDAR TXT AQUI
+
+    if (Indice != 0) {
+        switch (Indice) {
+            case 1:
+                //LOGICA PARA GUARDAR RESIDENTE
+                break;
+            case 2:
+                //LOGICA PARA GUARDAR PARIENTE
+                break;
+            default:
+                break;
+        }
+    }
+    else {
+        //AGREGAR ALERTA CUANDO NO SE DEFINIO NUM
+    }
+}
+
+//CAMPOS DE REGISTRO DE EXPEDIENTES
+var txtFechaNac = document.getElementById('FechNac');
+var txtFechIng = document.getElementById('FechIng');
+var chkEstadoExp = document.getElementById('EstadoExp');
+
+function GuardarResidenteExpediente() {
+    //VALIDAR TXT AQUI
+
+    OcultarTodo();
+    InfoArticulo.style.display = "block";
+}
+
+//CAMPOS DE REGISTRO DE ARTICULOS
+var txtDescripcion = document.getElementById('ArtDescripcion');
+var cmdTipoArticulo = document.getElementById('TipoArticulo');
+var chkEstadoArticulo = document.getElementById('EstadoArticulo');
+
+function GuardarArticulo() {
+    //VALIDAR TXT AQUI
+
+}
 
 function AgregarResidente(num) {
     Indice = num;
@@ -54,47 +132,9 @@ function AgregarPersona() {
     InfoPersona.style.display = "block";
 }
 
-function GuardarPersona() {
-    if (Indice != 0) {
-        switch (Indice) {
-            case 1:
-                //LOGICA PARA GUARDAR RESIDENTE
-                AgregarTelefono();
-                break;
-            case 2:
-                //LOGICA PARA GUARDAR PARIENTE
-                AgregarTelefono();
-                break;
-            default:
-                break;
-        }
-    }
-    else {
-        //AGREGAR ALERTA CUANDO NO SE DEFINIO NUM
-    }
-}
-
 function AgregarTelefono() {
     OcultarTodo();
     InfoTelefono.style.display = "block";
-}
-
-function GuardarTelefono() {
-    if (Indice != 0) {
-        switch (Indice) {
-            case 1:
-                //LOGICA PARA GUARDAR RESIDENTE
-                break;
-            case 2:
-                //LOGICA PARA GUARDAR PARIENTE
-                break;
-            default:
-                break;
-        }
-    }
-    else {
-        //AGREGAR ALERTA CUANDO NO SE DEFINIO NUM
-    }
 }
 
 function ContinuarTelefono() {
@@ -120,15 +160,6 @@ function ContinuarTelefono() {
 function AgregarResidenteExpediente() {
     OcultarTodo();
     InfoExpediente.style.display = "block";
-}
-
-function GuardarResidenteExpediente() {
-    OcultarTodo();
-    InfoArticulo.style.display = "block";
-}
-
-function GuardarArticulo() {
-
 }
 
 function ContinuarArticulo() {

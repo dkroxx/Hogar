@@ -10,9 +10,67 @@ var InfoPersona = document.getElementById('InfoPersona');
 var InfoTelefono = document.getElementById('InfoTelefono');
 var InfoUsuario = document.getElementById('InfoUsuario');
 var BtnCrearRol = document.getElementById('btnCrearRol');
-
 var FormRoles = document.getElementById('formRol');
-var TablaRoles = document.getElementById('tblRol')
+var TablaRoles = document.getElementById('tblRol');
+
+//CAMPOS DEL REGISTRO GENERAL
+var txtDescripcion = document.getElementById('DescripcionGeneral');
+var chkEstado = document.getElementById('EstadoGeneral');
+var IndiceGeneral = 0;
+
+function AgregarNuevoRegistro() {
+    //VALIDAR TXT AQUI
+
+}
+
+//CAMPOS DE REGISTRO DE ROLES
+var txtNmRol = document.getElementById('NomRol');
+var cmbResidente = document.getElementById('PerResidente');
+var cmbAsistente = document.getElementById('PerAsistente');
+var cmbVisitas = document.getElementById('PerVisitas');
+var cmbConfiguracion = document.getElementById('PerConfiguraciones');
+var chkEstadoRol = document.getElementById('EstadoRol');
+
+function AgregarNuevoRol() {
+    //VALIDAR TXT AQUI
+
+    FinalizarRegistroRol()
+}
+
+//CAMPOS DE REGISTRO DE INFORMACION PERSONAL
+var txtCedula = document.getElementById('Cedula');
+var txtNombre = document.getElementById('Nombre');
+var txtApellido1 = document.getElementById('Apellido1');
+var txtApellido2 = document.getElementById('Apellido2');
+var chkEstadoPersona = document.getElementById('EstadoPersona');
+
+function AgregarNuevaPersona() {
+    //VALIDAR TXT AQUI
+
+    AgregarTelefono();
+}
+
+//CAMPOS DE REGISTRO DE TELEFONO
+var txtNumTelefono = document.getElementById('NumeroTel');
+var cmbTipoTel = document.getElementById('TipoTelefono');
+var chkEstadoTelefono = document.getElementById('EstadoTelefono');
+
+function AgregarNuevoTelefono() {
+    //VALIDAR TXT AQUI
+}
+
+//CAMPOS DE REGISTRO DE USUARIO
+var txtUsuario = document.getElementById('Usuario');
+var txtContra1 = document.getElementById('Contrasena');
+var txtContra2 = document.getElementById('ContrasenaRepita');
+var cmbTipoRol = document.getElementById('Rol');
+var chkEstadoUsuario = document.getElementById('EstadoUsuario');
+
+function AgregarNuevoUsuario() {
+    //VALIDAR TXT AQUI
+
+    GuardarUsuario()
+}
 
 function AgregarPersona() {
     BtnAtras.style.display = "none";
@@ -23,14 +81,14 @@ function AgregarPersona() {
     Titulo.innerHTML = `${txtTitulo} / Agregar usuario`;
 }
 
-function AgregarTelefono() {
-    InfoPersona.style.display = "none";
-    InfoTelefono.style.display = "block";
-}
-
 function AgregarUsuario() {
     InfoTelefono.style.display = "none";
     InfoUsuario.style.display = "block";
+}
+
+function AgregarTelefono() {
+    InfoPersona.style.display = "none";
+    InfoTelefono.style.display = "block";
 }
 
 function FinalizarRegistroUsuario() {
@@ -45,7 +103,6 @@ function FinalizarRegistroUsuario() {
 
 function GuardarUsuario() {
     FinalizarRegistroUsuario();
-    //LOGICA PARA GUARDAR EL USUARIO
 }
 
 function MostrarConfigUsuario() {
@@ -69,11 +126,6 @@ function AgregarRol() {
     BtnAtras.style.display = "none";
     FormRoles.style.display = "block";
     BtnCrearRol.style.display = "none";
-}
-
-function GuardarRol() {
-    FinalizarRegistroUsuario();
-    //LOGICA PARA GUARDAR EL ROL
 }
 
 function FinalizarRegistroRol() {
