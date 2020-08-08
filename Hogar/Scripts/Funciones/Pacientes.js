@@ -12,6 +12,38 @@ var InfoArticulo = document.getElementById('InfoArticulo');
 var InfoAsistente = document.getElementById('InfoAsistente');
 var InfoPariente = document.getElementById('InfoVisitante');
 
+var Indice = 0;
+
+//INDICE = 1 -> RESIDENTE
+//INDICE = 2 -> PARIENTE
+
+function blockCampos(state, method) {
+    switch (method) {
+        case "AgregarNuevaPersona":
+            txtCedula.disabled = state;
+            txtNombre.disabled = state;
+            txtApellido1.disabled = state;
+            txtApellido2.disabled = state;
+            chkEstadoPersona.disabled = state;
+            break;
+        case "AgregarNuevaTelefono":
+            txtNumTelefono.disabled = state;
+            cmbTipoTel.disabled = state;
+            break;
+        case "GuardarResidenteExpediente":
+            txtFechaNac.disabled = state;
+            txtFechaIng.disabled = state;
+            break;
+        case "GuardarArticulo":
+            txtDescripcion.disabled = state;
+            cmdTipoArticulo.disabled = state;
+            txtCantidad.disabled = state;
+            break;
+        default:
+            break;
+    }
+}
+
 //CAMPOS DE REGISTRO DE INFORMACION PERSONAL
 var txtCedula = document.getElementById('Cedula');
 var txtNombre = document.getElementById('Nombre');
@@ -19,34 +51,31 @@ var txtApellido1 = document.getElementById('Apellido1');
 var txtApellido2 = document.getElementById('Apellido2');
 var chkEstadoPersona = document.getElementById('EstadoPersona');
 
-var Indice = 0;
-
-//INDICE = 1 -> RESIDENTE
-//INDICE = 2 -> PARIENTE
-//INDICE = 3 -> ASISTENTE
-
 function AgregarNuevaPersona() {
-    //VALIDAR TXT AQUI
+    if ((txtCedula.value.length > 8 && txtCedula.value.length < 15) && txtNombre.value.length > 0 && txtApellido1.value.length > 0 && txtApellido2.value.length > 0) {
+        blockCampos(true, "AgregarNuevaPersona");
+        var Consulta = "";
 
-    if (Indice != 0) {
-        switch (Indice) {
-            case 1:
-                //LOGICA PARA GUARDAR RESIDENTE
-
-                break;
-            case 2:
-                //LOGICA PARA GUARDAR PARIENTE
-
-                break;
-            default:
-                break;
+        if (Indice == 1) {
+            var Consulta = `SELECT idPersona FROM Persona WHERE Cedula LIKE '${txtCedula.value}' | INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Estado) VALUES('${txtCedula.value}', '${txtNombre.value}', '${txtApellido1.value}', '${txtApellido2.value}', true)`;
         }
+        else if (Indice == 2) {
+            var Consulta = `SELECT idPersona FROM Persona WHERE Cedula LIKE '${txtCedula.value}' | INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Estado) VALUES('${txtCedula.value}', '${txtNombre.value}', '${txtApellido1.value}', '${txtApellido2.value}', true)|INSERT INTO Visitante(Estado, Persona_idPersona) VALUES (TRUE, {0});`;
+        }
+        
+        Request(Consulta, "InsertBasico");
+    } else {
+        MostrarModal("Debes completar todos los campos del formulario.");
     }
-    else {
-        //AGREGAR ALERTA CUANDO NO SE DEFINIO NUM
-    }
+}
 
-    AgregarTelefono();
+function LimpiarPersona() {
+    txtCedula.value = "";
+    txtNombre.value = "";
+    txtApellido1.value = "";
+    txtApellido2.value = "";
+    chkEstadoPersona.disabled = true;
+    chkEstadoPersona.checked = true;
 }
 
 //CAMPOS DE REGISTRO DE TELEFONO
@@ -54,46 +83,66 @@ var txtNumTelefono = document.getElementById('NumeroTel');
 var cmbTipoTel = document.getElementById('TipoTelefono');
 var chkEstadoTelefono = document.getElementById('EstadoTelefono');
 
-function GuardarTelefono() {
-    //VALIDAR TXT AQUI
+function AgregarNuevoTelefono() {
+    var NumTelefono = txtNumTelefono.value;
+    var TipoTelefono = $("#TipoTelefono").val();
 
-    if (Indice != 0) {
-        switch (Indice) {
-            case 1:
-                //LOGICA PARA GUARDAR RESIDENTE
-                break;
-            case 2:
-                //LOGICA PARA GUARDAR PARIENTE
-                break;
-            default:
-                break;
-        }
+    if (NumTelefono.length == 8 && TipoTelefono != 0) {
+        blockCampos(true, "AgregarNuevaTelefono");
+        var Consulta = `SELECT idNumTelefono FROM NumTelefono WHERE Telefono = '${NumTelefono}'|INSERT INTO NumTelefono (Telefono, Estado, Persona_idPersona, TipoTelefono_idTipoTelefono) VALUES ('${NumTelefono}', TRUE, {0}, ${TipoTelefono})`;
+        Request(Consulta, "InsertBasico");
     }
     else {
-        //AGREGAR ALERTA CUANDO NO SE DEFINIO NUM
+        MostrarModal("Debe de ingresar un número válido (########) y seleccionar un tipo de teléfono.");
     }
 }
 
+function LimpiarTelefono() {
+    txtNumTelefono.value = "";
+    cmbTipoTel.selectedIndex = 0;
+}
+
 //CAMPOS DE REGISTRO DE EXPEDIENTES
-var txtFechaNac = document.getElementById('FechNac');
-var txtFechIng = document.getElementById('FechIng');
+var txtFechaNac = document.getElementById('FechaNac');
+var txtFechaIng = document.getElementById('FechaIng');
 var chkEstadoExp = document.getElementById('EstadoExp');
 
 function GuardarResidenteExpediente() {
-    //VALIDAR TXT AQUI
+    blockCampos(true, "GuardarResidenteExpediente");
+    var Consulta = `INSERT INTO Residente(Nacimiento, Ingreso, Estado, Persona_idPersona) VALUES('${txtFechaNac.value}', '${txtFechaIng.value}', TRUE, {0});|SELECT idResidente From Residente WHERE Persona_idPersona = {0};|INSERT INTO ExpedienteGeneral(Realizado, Pacientes_idPacientes, Usuarios_idUsuarios) VALUES(sysdate(), {0}, {1});|SELECT idExpGen From ExpedienteGeneral WHERE Pacientes_idPacientes = {0};`;
+    Request(Consulta, "InsertBasico");
+}
 
-    OcultarTodo();
-    InfoArticulo.style.display = "block";
+function LimpiarResidente() {
+    txtFechaNac.value = '2000-01-01';
+    txtFechaIng.value = '2000-01-01';
 }
 
 //CAMPOS DE REGISTRO DE ARTICULOS
 var txtDescripcion = document.getElementById('ArtDescripcion');
 var cmdTipoArticulo = document.getElementById('TipoArticulo');
+var txtCantidad = document.getElementById('Cantidad');
 var chkEstadoArticulo = document.getElementById('EstadoArticulo');
 
 function GuardarArticulo() {
-    //VALIDAR TXT AQUI
+    var Descrip = txtDescripcion.value;
+    var Cant = txtCantidad.value;
+    var TipoArt = $("#TipoArticulo").val();
 
+    if (Descrip.length > 1 && TipoArt != 0 && Cant != 0) {
+        blockCampos(true, "GuardarArticulo");
+        var Consulta = ` |INSERT INTO Articulos(Descripcion, Cantidad, Estado, TipoArticulo_idTipoArticulo, ExpedienteGeneral_idExpGen) VALUES('${Descrip}', ${Cant}, TRUE, ${TipoArt}, {0});`
+        Request(Consulta, "InsertBasico")
+    }
+    else {
+        MostrarModal("Debes ingresar una descripción válida y seleccionar un tipo. Ademas la cantidad no puede ser 0.");
+    }
+}
+
+function LimpiarArticulo() {
+    txtDescripcion.value = "";
+    cmdTipoArticulo.selectedIndex = 0;
+    txtCantidad.value = "";
 }
 
 function AgregarResidente(num) {
@@ -105,6 +154,7 @@ function AgregarResidente(num) {
 function AgregarPariente(num) {
     Indice = num;
     CambiarTitulo("Residentes / Lista de parientes / Agregar pariente");
+    console.log(Indice);
     AgregarPersona();
 }
 
@@ -135,6 +185,7 @@ function AgregarPersona() {
 function AgregarTelefono() {
     OcultarTodo();
     InfoTelefono.style.display = "block";
+    CargarCombox("TipoTelefono");
 }
 
 function ContinuarTelefono() {
@@ -142,7 +193,7 @@ function ContinuarTelefono() {
         switch (Indice) {
             case 1:
                 //LOGICA PARA GUARDAR RESIDENTE
-                AgregarResidenteExpediente()
+                AgregarResidenteExpediente();
                 break;
             case 2:
                 //LOGICA PARA GUARDAR PARIENTE

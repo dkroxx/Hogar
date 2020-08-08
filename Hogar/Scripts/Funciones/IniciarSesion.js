@@ -12,7 +12,7 @@ function Validar() {
         Request(Consulta, "ValidarUsuario");
     }
     else {
-        MostrarModal("Debes ingresar unas credenciales válidas.");
+        MostrarModal("Debes ingresar credenciales válidas.");
     }
 }
 

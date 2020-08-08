@@ -16,10 +16,47 @@ var txtApellido1 = document.getElementById('Apellido1');
 var txtApellido2 = document.getElementById('Apellido2');
 var chkEstadoPersona = document.getElementById('EstadoPersona');
 
-function AgregarNuevaPersona() {
-    //VALIDAR TXT AQUI
+function blockCampos(state, method) {
+    switch (method) {
+        case "AgregarNuevaPersona":
+            txtCedula.disabled = state;
+            txtNombre.disabled = state;
+            txtApellido1.disabled = state;
+            txtApellido2.disabled = state;
+            chkEstadoPersona.disabled = state;
+            break;
+        case "AgregarNuevaTelefono":
+            txtNumTelefono.disabled = state;
+            cmbTipoTel.disabled = state;
+            break;
+        case "GuardarAsistente":
+            cmbAsistente.disabled = state;
+            fechIngreso.disabled = state;
+            fechEntrada.disabled = state;
+            fechSalidad.disabled = state;
+            break;
+        default:
+            break;
+    }
+}
 
-    AgregarTelefono();
+function AgregarNuevaPersona() {
+    if ((txtCedula.value.length > 8 && txtCedula.value.length < 15) && txtNombre.value.length > 0 && txtApellido1.value.length > 0 && txtApellido2.value.length > 0) {
+        blockCampos(true, "AgregarNuevaPersona");
+        var Consulta = `SELECT idPersona FROM Persona WHERE Cedula LIKE '${txtCedula.value}' | INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Estado) VALUES('${txtCedula.value}', '${txtNombre.value}', '${txtApellido1.value}', '${txtApellido2.value}', true)`;
+        Request(Consulta, "InsertBasico");
+    } else {
+        MostrarModal("Debes completar todos los campos del formulario.");
+    }
+}
+
+function LimpiarPersona() {
+    txtCedula.value = "";
+    txtNombre.value = "";
+    txtApellido1.value = "";
+    txtApellido2.value = "";
+    chkEstadoPersona.disabled = true;
+    chkEstadoPersona.checked = true;
 }
 
 //CAMPOS DE REGISTRO DE TELEFONO
@@ -28,9 +65,23 @@ var cmbTipoTel = document.getElementById('TipoTelefono');
 var chkEstadoTelefono = document.getElementById('EstadoTelefono');
 
 function AgregarNuevoTelefono() {
-    //VALIDAR TXT AQUI
+    var NumTelefono = txtNumTelefono.value;
+    var TipoTelefono = $("#TipoTelefono").val();
+
+    if (NumTelefono.length == 8 && TipoTelefono != 0) {
+        blockCampos(true, "AgregarNuevaTelefono");
+        var Consulta = `SELECT idNumTelefono FROM NumTelefono WHERE Telefono = '${NumTelefono}'|INSERT INTO NumTelefono (Telefono, Estado, Persona_idPersona, TipoTelefono_idTipoTelefono) VALUES ('${NumTelefono}', TRUE, {0}, ${TipoTelefono})`;
+        Request(Consulta, "InsertBasico");
+    }
+    else {
+        MostrarModal("Debe de ingresar un número válido (########) y seleccionar un tipo de teléfono.");
+    }
 }
 
+function LimpiarTelefono() {
+    txtNumTelefono.value = "";
+    cmbTipoTel.selectedIndex = 0;
+}
 
 //CAMPOS DE FORMULARIO REGISTRO ASISTENTE
 var cmbAsistente = document.getElementById('TipoAsistente');
@@ -40,10 +91,21 @@ var fechSalidad = document.getElementById('FechSalida');
 var EstadoAsistente = document.getElementById('FechSalida');
 
 function GuardarAsistente() {
-    //VALIDAR TXT AQUI
+    var TipoAsistente = $("#TipoAsistente").val();
+    var Entrada = fechEntrada.value;
+    var Salida = fechSalidad.value;
 
-    FinalizarRegistro();
-    CambiarTitulo("Asistentes / Lista de asistentes");
+    if (TipoAsistente != 0) {
+        blockCampos(true, "GuardarAsistente");
+        var Consulta = ` |INSERT INTO Asistente(Ingreso, Entrada, Salida, Estado, Persona_idPersona, TipoAsistente_idTipoAsistente) VALUES(SYSDATE(), '${Entrada}', '${Salida}', TRUE, {0}, ${TipoAsistente})`;
+        Request(Consulta, "InsertBasico")
+    }    
+}
+
+function LimpiarAsistente() {
+    cmbAsistente.value = "";
+    fechEntrada.value = "08:00";
+    fechSalidad.value = "17:00";
 }
 
 function ProcesosAsignar() {
@@ -56,18 +118,16 @@ function AgregarPersona() {
     CambiarTitulo("Asistentes / Lista de asistentes / Agregar asistente");
 }
 
-function RegistrarPersona() {
+function AgregarTelefono() {
     OcultarTodo();
     InfoTelefono.style.display = "block";
-}
-
-function RegistrarTelefono() {
-
+    CargarCombox("TipoTelefono");
 }
 
 function ContinuarTelefono() {
     OcultarTodo();
     InfoAsistente.style.display = "block"
+    CargarCombox("TipoAsistente");
 }
 
 function FinalizarRegistro() {
