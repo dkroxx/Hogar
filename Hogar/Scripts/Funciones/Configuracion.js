@@ -14,6 +14,7 @@ var FormRoles = document.getElementById('formRol');
 var TablaRoles = document.getElementById('tblRol');
 var btnNuevoRegistro = document.getElementById('btnNuevoRegistro');
 
+
 //CAMPOS DEL REGISTRO GENERAL
 var txtDescripcion = document.getElementById('DescripcionGeneral');
 var chkEstado = document.getElementById('EstadoGeneral');
@@ -245,6 +246,9 @@ function FinalizarRegistroUsuario() {
 
 function MostrarConfigUsuario() {
     OcultarTablaConfig("Usuarios");
+    if (document.getElementById('tblMostrarUsuarios').rows.length == 1) {
+        LlenarTabla("tblMostrarUsuarios");
+    }    
     EdicionUsuario.style.display = "block";
     BtnAtras.style.display = "block";
     BtnAgregar.style.display = "block";
@@ -255,6 +259,9 @@ function MostrarConfigRol() {
     EdicionRoles.style.display = "block";
     BtnAtras.style.display = "block";
     BtnCrearRol.style.display = "block";
+    if (document.getElementById('tblRoles').rows.length == 1) {
+        LlenarTabla("tblRoles");
+    }  
 }
 
 function AgregarRol() {
@@ -289,6 +296,7 @@ function MostrarConfigArticulo() {
     OcultarTablaConfig("Catálogo Articulo");
     EdicionGeneral.style.display = "block";
     BtnAtras.style.display = "block";
+    LlenarTablaGeneral("TipoArticulo");
 }
 
 function MostrarConfigTelefono() {
@@ -297,6 +305,7 @@ function MostrarConfigTelefono() {
     OcultarTablaConfig("Catálogo Teléfono");
     EdicionGeneral.style.display = "block";
     BtnAtras.style.display = "block";
+    LlenarTablaGeneral("TipoTelefono");
 }
 
 function MostrarConfigParentesco() {
@@ -305,6 +314,7 @@ function MostrarConfigParentesco() {
     OcultarTablaConfig("Catálogo Parentesco");
     EdicionGeneral.style.display = "block";
     BtnAtras.style.display = "block";
+    LlenarTablaGeneral("TipoParentesco");
 }
 
 function MostrarConfigAsistente() {
@@ -313,6 +323,7 @@ function MostrarConfigAsistente() {
     OcultarTablaConfig("Catálogo Asistente");
     EdicionGeneral.style.display = "block";
     BtnAtras.style.display = "block";
+    LlenarTablaGeneral("TipoAsistente");
 }
 
 function OcultarTablaConfig(Config) {

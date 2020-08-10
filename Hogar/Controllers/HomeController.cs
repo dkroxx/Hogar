@@ -144,6 +144,29 @@ namespace Hogar.Controllers
         #region MetodosHttp
 
         [HttpPost]
+        public JsonResult LlenarTabla(string Query)
+        {
+            Combox obj = new Combox();
+            cmbOptions = new List<string>();
+            try
+            {
+                ConsultarSql(Query, "Table");
+
+                obj.ErrorCode = "00";
+                obj.Mensaje = "Transacción exitosa";
+                obj.ComboxOptions = cmbOptions;
+            }
+            catch (Exception ex)
+            {
+                obj.ErrorCode = "99";
+                obj.Error = ex.Message;
+            }
+
+            var Response = new JavaScriptSerializer().Serialize(obj);
+            return Json(Response);
+        }
+
+        [HttpPost]
         public JsonResult LlenarCombos(string Query)
         {
             Combox obj = new Combox();
@@ -350,6 +373,36 @@ namespace Hogar.Controllers
                             var Option = string.Format(msj.OptionCombo, reader.GetString(0), reader.GetString(1));
                             cmbOptions.Add(Option);
                             break;
+                        case "Table":
+                            var Row = string.Empty;
+
+                            if (Query.Contains("from Residente"))
+                            {
+                                Row = string.Format(msj.TablaPaciente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6));
+                            }
+                            if (Query.Contains("from Visitante"))
+                            {
+                                Row = string.Format(msj.TablaPariente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5));
+                            }
+                            if (Query.Contains("from Asistente"))
+                            {
+                                Row = string.Format(msj.TablaAsistente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
+                            }
+                            if (Query.Contains("from Usuario"))
+                            {
+                                Row = string.Format(msj.TablaUsuario, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6));
+                            }
+                            if (Query.Contains("from TipoRol"))
+                            {
+                                Row = string.Format(msj.TablaRoles, reader.GetString(0), reader.GetString(1), ConvertirString(reader.GetString(2)), ConvertirString(reader.GetString(3)), ConvertirString(reader.GetString(4)), ConvertirString(reader.GetString(5)));
+                            }
+                            if (Query.Contains("from TipoArticulo") || Query.Contains("from TipoAsistente") || Query.Contains("from TipoParentesco") || Query.Contains("from TipoTelefono"))
+                            {
+                                Row = string.Format(msj.TablaGeneral, reader.GetString(0), reader.GetString(1));
+                            }
+
+                            cmbOptions.Add(Row);
+                            break;
                         case "SelectResidente":
                             Session["IdRes"] = reader.GetString(0);
                             break;
@@ -370,6 +423,20 @@ namespace Hogar.Controllers
             return Resultado;
         }
 
+        private string ConvertirString(string values)
+        {
+            var Valor = string.Empty;
+            if (values == "1")
+            {
+                Valor = "Permitir";
+            }
+            else
+            {
+                Valor = "Denegar";
+            }
+            return Valor;
+        }
+
         #endregion
     }
 
@@ -381,6 +448,12 @@ namespace Hogar.Controllers
         public string ErrorRegExiste = "El valor que se ingresó ya se encuentra registrado.";
         public string ErrorExpediente = "Ha ocurrido un problema al guardar el expediente.";
         public string OptionCombo = "<option value=\"{0}\">{1}</option>";
+        public string TablaPaciente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Nacimiento'>{3}</td><td data-label='Ingreso'>{4}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick=''>Modificar</button></td></tr>";
+        public string TablaPariente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Telefono'>{3}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick=''>Modificar</button></td></tr>";
+        public string TablaAsistente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Tipo'>{3}</td><td data-label='Entrada'>{4}</td><td data-label='Salida'>{5}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick='ProcesosAsignar()'>Seleccionar</button></td></tr>";
+        public string TablaUsuario = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Usuario'>{3}</td><td data-label='Rol'>{4}</td><td data-label='Acciones'><button type='button' class='btn btn-default' onclick=''>Modificar</button></td><td data-label='Acciones'><button type='button' class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
+        public string TablaRoles = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Residentes'>{2}</td><td data-label='Asistentes'>{3}</td><td data-label='Visitas'>{4}</td><td data-label='Configuraciones'>{5}</td><td data-label='Accion'><button type='button' class='btn btn-default' onclick=''>Modificar</button></td><td data-label='Accion'><button type='button' class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
+        public string TablaGeneral = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Acciones'><button type='button' class='btn btn-default' onclick=''>Modificar</button></td><td data-label='Acciones'><button type='button'class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
     }
 
     public class Combox

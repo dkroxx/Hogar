@@ -9,6 +9,10 @@ var tbAsistente = document.getElementById('tbAsistente');
 var tbAsignar = document.getElementById('tbAsignar');
 var AccionAsignacion = document.getElementById('AccionAsignacion');
 
+$(document).ready(function () {
+    LlenarTabla("TablaAsistente");
+});
+
 //CAMPOS DE REGISTRO DE INFORMACION PERSONAL
 var txtCedula = document.getElementById('Cedula');
 var txtNombre = document.getElementById('Nombre');

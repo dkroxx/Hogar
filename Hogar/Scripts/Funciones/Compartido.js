@@ -1,4 +1,5 @@
 ﻿var Combox = "";
+var Tablax = "";
 
 function Request(Query, Metodo) {
     try {
@@ -20,6 +21,12 @@ function Request(Query, Metodo) {
                             break;
                         case "CerrarSesion":
                             window.location.href = "/Home/IniciarSesion";
+                            break;
+                        case "LlenarTabla":
+                            for (var i = 0; i < Respuesta.ComboxOptions.length; i++) {                                
+                                $("#" + Tablax).append(Respuesta.ComboxOptions[i]);
+                            }
+                            CargarDatatable(Tablax);
                             break;
                         case "LlenarCombos":
                             if (Combox != "") {
@@ -180,4 +187,109 @@ function CargarCombox(idCombo) {
             break;
     }
     Request(Consulta, "LlenarCombos");
+}
+
+function LlenarTabla(tabla) {
+    Tablax = tabla;
+    var Consulta = "";
+    switch (tabla) {
+        case "TablaPaciente":
+            Consulta = "SELECT r.idResidente, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, r.Nacimiento, r.Ingreso FROM Residente r INNER JOIN Persona p on r.Persona_idPersona = p.idPersona";
+            break;
+        case "TablaParientes":
+            Consulta = "select v.IdVisitante, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, t.Telefono from Visitante v INNER JOIN Persona p on v.Persona_idPersona = p.idPersona INNER JOIN NumTelefono t on p.idPersona = t.Persona_idPersona where v.Estado = true and t.Estado = true";
+            break;
+        case "TablaAsistente":
+            Consulta = "select a.idAsistente, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, ta.Nombre, a.Entrada, a.Salida from Asistente a INNER JOIN Persona p on a.Persona_idPersona = p.idPersona INNER JOIN TipoAsistente ta on ta.idTipoAsistente = a.TipoAsistente_idTipoAsistente where a.Estado = true";
+            break;
+        case "tblMostrarUsuarios":
+            Consulta = "select u.idUsuarios,  p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, u.Usuario, r.Nombre from Usuario u INNER JOIN Persona p on u.Persona_idPersona = p.idPersona INNER JOIN TipoRol r on u.TipoRol_idTipoRol = r.idTipoRol where u.Estado = true";
+            break;
+        case "tblRoles":
+            Consulta = "select idTipoRol, Nombre, Pacientes, Asistentes, Visitas, Configuraciones from TipoRol where Estado = true";
+            break;
+        default:
+            break;
+    }
+
+    Request(Consulta, "LlenarTabla");
+}
+
+function LlenarTablaGeneral(tipo) {
+    Tablax = "tblGeneral";
+    var Consulta = "";
+    switch (tipo) {
+        case "TipoArticulo":
+            Consulta = "select idTipoArticulo, Nombre from TipoArticulo where Estado = true;";
+            break;
+        case "TipoAsistente":
+            Consulta = "select idTipoAsistente, Nombre from TipoAsistente where Estado = true;";
+            break;
+        case "TipoParentesco":
+            Consulta = "select idTipoParentesco, Nombre from TipoParentesco where Estado = true;";
+            break;
+        case "TipoTelefono":
+            Consulta = "select idTipoTelefono, Nombre from TipoTelefono where Estado = true;";
+            break;
+        default:
+            break;
+    }
+    Request(Consulta, "LlenarTabla");
+}
+
+let idioma =
+{
+    "sProcessing": "Procesando...",
+    "sLengthMenu": "Mostrar _MENU_ registros",
+    "sZeroRecords": "No se encontraron resultados",
+    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+    "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+    "sInfoPostFix": "",
+    "sSearch": "Buscar:",
+    "sUrl": "",
+    "sInfoThousands": ",",
+    "sLoadingRecords": "Cargando...",
+    "oPaginate": {
+        "sFirst": "Primero",
+        "sLast": "Ultimo",
+        "sNext": "Siguiente",
+        "sPrevious": "Anterior"
+    },
+    "oAria": {
+        "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    },
+    "buttons": {
+        "copyTitle": 'Informacion copiada',
+        "copyKeys": 'Use your keyboard or menu to select the copy command',
+        "copySuccess": {
+            "_": '%d filas copiadas al portapapeles',
+            "1": '1 fila copiada al portapapeles'
+        },
+
+        "pageLength": {
+            "_": "Mostrar %d filas",
+            "-1": "Mostrar Todo"
+        }
+    }
+};
+
+function CargarDatatable(tabla) {
+    $('#' + tabla).DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            'excelHtml5',
+            'pdfHtml5'
+        ],
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": true,
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Mostrar Todo"]],
+        "language": idioma
+    });
 }

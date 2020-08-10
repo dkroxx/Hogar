@@ -11,6 +11,14 @@ var InfoExpediente = document.getElementById('InfoExpediente');
 var InfoArticulo = document.getElementById('InfoArticulo');
 var InfoAsistente = document.getElementById('InfoAsistente');
 var InfoPariente = document.getElementById('InfoVisitante');
+var TablaPar = document.getElementById('TablaParientes');
+
+
+
+$(document).ready(function () {
+    LlenarTabla("TablaPaciente");       
+});
+
 
 var Indice = 0;
 
@@ -255,9 +263,12 @@ function clickPacientes() {
 function clickParientes() {
     QuitarClase();
     tbParientes.className = "active";
-    CambiarTitulo("Residentes / Lista de parientes");
+    CambiarTitulo("Residentes / Lista de parientes");    
     OcultarTodo()
     tblParientes.style.display = "block";
+    if (TablaPar.rows.length == 1) {
+        LlenarTabla("TablaParientes"); 
+    }
 }
 
 function QuitarClase() {
