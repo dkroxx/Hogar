@@ -10,6 +10,7 @@ var tbAsignar = document.getElementById('tbAsignar');
 var AccionAsignacion = document.getElementById('AccionAsignacion');
 
 $(document).ready(function () {
+    MostrarModalCargando();
     LlenarTabla("TablaAsistente");
 });
 
@@ -46,6 +47,7 @@ function blockCampos(state, method) {
 
 function AgregarNuevaPersona() {
     if ((txtCedula.value.length > 8 && txtCedula.value.length < 15) && txtNombre.value.length > 0 && txtApellido1.value.length > 0 && txtApellido2.value.length > 0) {
+        MostrarModalCargando();
         blockCampos(true, "AgregarNuevaPersona");
         var Consulta = `SELECT idPersona FROM Persona WHERE Cedula LIKE '${txtCedula.value}' | INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Estado) VALUES('${txtCedula.value}', '${txtNombre.value}', '${txtApellido1.value}', '${txtApellido2.value}', true)`;
         Request(Consulta, "InsertBasico");
@@ -73,6 +75,7 @@ function AgregarNuevoTelefono() {
     var TipoTelefono = $("#TipoTelefono").val();
 
     if (NumTelefono.length == 8 && TipoTelefono != 0) {
+        MostrarModalCargando();
         blockCampos(true, "AgregarNuevaTelefono");
         var Consulta = `SELECT idNumTelefono FROM NumTelefono WHERE Telefono = '${NumTelefono}'|INSERT INTO NumTelefono (Telefono, Estado, Persona_idPersona, TipoTelefono_idTipoTelefono) VALUES ('${NumTelefono}', TRUE, {0}, ${TipoTelefono})`;
         Request(Consulta, "InsertBasico");
@@ -100,6 +103,7 @@ function GuardarAsistente() {
     var Salida = fechSalidad.value;
 
     if (TipoAsistente != 0) {
+        MostrarModalCargando();
         blockCampos(true, "GuardarAsistente");
         var Consulta = ` |INSERT INTO Asistente(Ingreso, Entrada, Salida, Estado, Persona_idPersona, TipoAsistente_idTipoAsistente) VALUES(SYSDATE(), '${Entrada}', '${Salida}', TRUE, {0}, ${TipoAsistente})`;
         Request(Consulta, "InsertBasico")
@@ -112,8 +116,67 @@ function LimpiarAsistente() {
     fechSalidad.value = "17:00";
 }
 
-function ProcesosAsignar() {
+var IndexPersona = 0;
+
+//IDENTIFICACION DEL RESIDENTE
+function ProcesosAsignar(num, name) {
     AccionAsignacion.style.display = "block";
+    IndexPersona = num;
+
+    document.getElementById('txtResidente').innerHTML = `Residente seleccionado: ${name}`;
+
+    var TablaAsignar = document.getElementById('TablaAsis');
+    if (TablaAsignar.rows.length == 1) {
+        MostrarModalCargando();
+        LlenarTabla('TablaAsis');
+    }
+}
+
+var Agregados = ["Vacio"]
+var IndexAsistente = [];
+
+function AgregarAsistente(num, name) {
+    document.getElementById('TablaAsignados').style.display = "block";
+    var Existe = false;    
+
+    for (var i = 0; i < Agregados.length; i++) {
+        if (name == Agregados[i]) {
+            Existe = true;
+        }
+    }
+
+    if (!Existe) {
+        //AGREGAR JQUERY DATATABLE
+        var Tbl = document.getElementById('TablaAsig');
+        if (Tbl.rows.length == 1) {
+            $("#TablaAsig").append(`<tr><td>${num}</td><td>${name}</td><td><button type='button' class='btn btn-danger' onclick='Asignado()'>Eliminar</button></td></tr>`);
+            CargarDatatable('TablaAsig');
+        }
+        else {
+            CurrentTable.destroy();
+            $("#TablaAsig").append(`<tr><td>${num}</td><td>${name}</td><td><button type='button' class='btn btn-danger' onclick='Asignado()'>Eliminar</button></td></tr>`);
+            CargarDatatable('TablaAsig');
+        }
+        Agregados.push(name);
+        IndexAsistente.push(num);
+    }
+    else {
+        MostrarModal("El asistente seleccionado ya ha sido agregado anteriormente.");
+    }
+}
+
+function GuardarRelacionAsistente() {
+    var Consulta = "";    
+
+    for (var i = 0; i < IndexAsistente.length; i++) {
+        MostrarModalCargando();
+        if (Consulta == "") {
+            Consulta = `select idRelacion from AsistenteResidente where Asistente_idAsistente = ${IndexAsistente[i]} and Residente_idResidente = ${IndexPersona} and Estado = true;|insert into AsistenteResidente (Asistente_idAsistente, Residente_idResidente, Estado) values (${IndexAsistente[i]}, ${IndexPersona}, true);`;
+        } else {
+            Consulta = Consulta + `!select idRelacion from AsistenteResidente where Asistente_idAsistente = ${IndexAsistente[i]} and Residente_idResidente = ${IndexPersona} and Estado = true;|insert into AsistenteResidente (Asistente_idAsistente, Residente_idResidente, Estado) values (${IndexAsistente[i]}, ${IndexPersona}, true);`;
+        }
+    }
+    Request(Consulta, "InsertBasico");
 }
 
 function AgregarPersona() {
@@ -162,6 +225,12 @@ function clickAsignarAsistente() {
     CambiarTitulo("Asistentes / Asignar asistentes");
     OcultarTodo()
     MarcoAsignar.style.display = "block";
+
+    var TablaResidente = document.getElementById('TablaRes');
+    if (TablaResidente.rows.length == 1) {
+        MostrarModalCargando();
+        LlenarTabla('TablaRes');
+    }
 }
 
 function QuitarClase() {

@@ -1,5 +1,6 @@
 ﻿var Combox = "";
 var Tablax = "";
+var CurrentTable;
 
 function Request(Query, Metodo) {
     try {
@@ -13,6 +14,8 @@ function Request(Query, Metodo) {
             dataType: "json",
             success: function (response) {
                 var Respuesta = JSON.parse(response);
+
+                $('#Cargando').modal('hide');
 
                 if (Respuesta.ErrorCode == "00") {
                     switch (Metodo) {
@@ -36,8 +39,14 @@ function Request(Query, Metodo) {
                                     case "TipoRol":
                                         ObjCombox = cmbTipoRol;
                                         break;
-                                    case "TipoParentesco":
-                                        ObjCombox = "";
+                                    case "cmbResidente":
+                                        ObjCombox = cmbResi;
+                                        break;
+                                    case "cmbParentesco":
+                                        ObjCombox = cmbAsig;
+                                        break;
+                                    case "cmbPariente":
+                                        ObjCombox = cmbPari;
                                         break;
                                     case "TipoArticulo":
                                         ObjCombox = cmdTipoArticulo;
@@ -67,52 +76,82 @@ function Request(Query, Metodo) {
                             }                           
                             break;
                         case "InsertBasico":
-                            if (Query.includes("TipoArticulo")) {
-                                MostrarModal(`Se agrego el registro: '${txtDescripcion.value}' correctamente.`);
-                                txtDescripcion.value = "";
-                                blockCampos(false, "AgregarNuevoRegistro");                                
+                            if (Query.includes("select idRelacion from AsistenteResidente")) {
+                                MostrarModal(`Se agrego el registro correctamente.`);
+                                setTimeout(function () { location.reload(); }, 1000);      
                             }
-                            if (Query.includes("TipoRol")) {
-                                MostrarModal(`Se agrego el registro: '${txtNmRol.value}' correctamente.`);
-                                LimpiarRoles();
-                                blockCampos(false, "AgregarNuevoRol");                                
-                                FinalizarRegistroRol();
-                            }
-                            if (Query.includes("Persona") && Query.includes("Cedula")) {
-                                MostrarModal(`Se registro a: '${txtNombre.value} ${txtApellido1.value}' correctamente. Continúe con los datos de contacto.`);
-                                blockCampos(false, "AgregarNuevaPersona");
-                                LimpiarPersona();
-                                AgregarTelefono();
-                            }
-                            if (Query.includes("NumTelefono")) {
-                                MostrarModal(`Se registro el numero: '${txtNumTelefono.value}' correctamente. Puede agregar otro teléfono o continuar con el proceso de registro.`);
-                                blockCampos(false, "AgregarNuevaTelefono");
-                                LimpiarTelefono();
-                            }
-                            if (Query.includes("SELECT idUsuarios FROM Usuario")) {
-                                MostrarModal(`Se registro el usuario: '${txtUsuario.value}' correctamente.`);
-                                blockCampos(false, "AgregarNuevoUsuario");
-                                LimpiarUsuario();
-                                FinalizarRegistroUsuario();
-                            }
-                            if (Query.includes("Asistente")) {
-                                MostrarModal(`Se registro el asistente correctamente.`);
-                                blockCampos(false, "GuardarAsistente");
-                                LimpiarAsistente();
-                                FinalizarRegistro();
-                            }
-                            if (Query.includes("Residente")) {
-                                MostrarModal(`Se registro el expediente correctamente.`);
-                                blockCampos(false, "GuardarResidenteExpediente");
-                                LimpiarResidente();
-                                OcultarTodo();
-                                InfoArticulo.style.display = "block";
-                                CargarCombox("TipoArticulo");
-                            }
-                            if (Query.includes("Articulos")) {
-                                MostrarModal(`Se registro: '${txtDescripcion.value}' correctamente.`);
-                                blockCampos(false, "GuardarArticulo")
-                                LimpiarArticulo();
+                            else {
+                                if (Query.includes("select idRelacion from VisitanteResidente where Visitante_idVisitante")) {
+                                    MostrarModal(`Se agrego la relación correctamente.`);
+                                    setTimeout(function () { location.reload(); }, 1000);                                    
+                                }
+                                if (Query.includes("TipoArticulo")) {
+                                    MostrarModal(`Se agrego el registro: '${txtDescripcion.value}' correctamente.`);
+                                    txtDescripcion.value = "";
+                                    blockCampos(false, "AgregarNuevoRegistro");
+                                    setTimeout(function () { location.reload(); }, 1000);  
+                                }
+                                if (Query.includes("TipoRol")) {
+                                    MostrarModal(`Se agrego el registro: '${txtNmRol.value}' correctamente.`);
+                                    LimpiarRoles();
+                                    blockCampos(false, "AgregarNuevoRol");
+                                    FinalizarRegistroRol();
+                                    setTimeout(function () { location.reload(); }, 1000);  
+                                }
+                                if (Query.includes("SELECT NOMBRE FROM TipoAsistente")) {
+                                    MostrarModal(`Se agrego el registro: '${txtDescripcion.value}' correctamente.`);
+                                    setTimeout(function () { location.reload(); }, 1000);  
+                                }
+                                if (Query.includes("SELECT NOMBRE FROM TipoParentesco WHERE NOMBRE LIKE")) {
+                                    MostrarModal(`Se agrego el registro: '${txtDescripcion.value}' correctamente.`);
+                                    setTimeout(function () { location.reload(); }, 1000);  
+                                }
+                                if (Query.includes("SELECT NOMBRE FROM TipoTelefono WHERE NOMBRE LIKE")) {
+                                    MostrarModal(`Se agrego el registro: '${txtDescripcion.value}' correctamente.`);
+                                    setTimeout(function () { location.reload(); }, 1000);  
+                                }
+                                if (Query.includes("Persona") && Query.includes("Cedula")) {
+                                    MostrarModal(`Se registro a: '${txtNombre.value} ${txtApellido1.value}' correctamente. Continúe con los datos de contacto.`);
+                                    blockCampos(false, "AgregarNuevaPersona");
+                                    LimpiarPersona();
+                                    AgregarTelefono();
+                                }
+                                if (Query.includes("NumTelefono")) {
+                                    MostrarModal(`Se registro el numero: '${txtNumTelefono.value}' correctamente. Puede agregar otro teléfono o continuar con el proceso de registro.`);
+                                    blockCampos(false, "AgregarNuevaTelefono");
+                                    LimpiarTelefono();
+                                }
+                                if (Query.includes("SELECT idUsuarios FROM Usuario")) {
+                                    MostrarModal(`Se registro el usuario: '${txtUsuario.value}' correctamente.`);
+                                    blockCampos(false, "AgregarNuevoUsuario");
+                                    LimpiarUsuario();
+                                    FinalizarRegistroUsuario();
+                                    setTimeout(function () { location.reload(); }, 1000);  
+                                }
+                                if (Query.includes(" |INSERT INTO Asistente(Ingreso, Entrada, Salida, Estado")) {
+                                    MostrarModal(`Se registro el asistente correctamente.`);
+                                    blockCampos(false, "GuardarAsistente");
+                                    LimpiarAsistente();
+                                    FinalizarRegistro();
+                                    setTimeout(function () { location.reload(); }, 1000);
+                                }
+                                if (Query.includes("INSERT INTO Residente(Nacimiento, Ingreso")) {
+                                    MostrarModal(`Se registro el expediente correctamente.`);
+                                    blockCampos(false, "GuardarResidenteExpediente");
+                                    LimpiarResidente();
+                                    OcultarTodo();
+                                    InfoArticulo.style.display = "block";
+                                    CargarCombox("TipoArticulo");
+                                }
+                                if (Query.includes("Articulos")) {
+                                    MostrarModal(`Se registro el articulo correctamente.`);
+                                    blockCampos(false, "GuardarArticulo")
+                                    LimpiarArticulo();
+                                }
+                                if (Query.includes("select idVisita from Bitacora where idResidente")) {
+                                    MostrarModal(`Se agendo la visita correctamente.`);
+                                    setTimeout(function () { location.reload(); }, 1000);  
+                                }
                             }
                             break;
                         default:
@@ -155,6 +194,57 @@ function Request(Query, Metodo) {
     }
 }
 
+function RequestCombox(Query, Combox) {
+    try {
+        var jdata = '{Query: "' + Query + '"}';
+
+        $.ajax({
+            type: "POST",
+            url: '/Home/LlenarCombos',
+            data: jdata,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                var Respuesta = JSON.parse(response);
+
+                $('#Cargando').modal('hide');
+
+                if (Respuesta.ErrorCode == "00") {
+                    var ObjCombox = document.getElementById(Combox);
+
+                    ObjCombox.innerHTML = "";
+                    ObjCombox.innerHTML = "<option value=\"0\">Seleccione</option>";
+
+                    if (Combox != null) {
+                        for (var i = 0; i < Respuesta.ComboxOptions.length; i++) {
+                            ObjCombox.innerHTML += Respuesta.ComboxOptions[i];
+                        }
+                    } else {
+                        MostrarModal("Ha ocurrido un problema de bajo nivel al cargar el menú desplegable.");
+                    }
+
+                    if (Respuesta.ComboxOptions.length == 0) {
+                        ObjCombox.innerHTML = "";
+                        ObjCombox.innerHTML = "<option value=\"0\">Sin registros</option>";
+                    }
+                }
+                else {
+                    MostrarModal(Respuesta.Error);
+                }
+
+            },
+            failure: function (response) {
+                console.log("Falló: " + response);
+            },
+            error: function (response) {
+                console.log("Error: " + response);
+            }
+        });
+    } catch (e) {
+        MostrarModal(e.Message)
+    }
+}
+
 function MostrarModal(Mensaje) {
     document.getElementById('MensajeModal').innerHTML = Mensaje;
     $('#MensajeAlerta').modal();
@@ -162,7 +252,7 @@ function MostrarModal(Mensaje) {
 
 $('#MensajeAlerta').on('shown.bs.modal', function () {
     $('#myInput').trigger('focus')
-})
+});
 
 function CargarCombox(idCombo) {
     Combox = idCombo;
@@ -191,6 +281,17 @@ function CargarCombox(idCombo) {
 
 function LlenarTabla(tabla) {
     Tablax = tabla;
+
+    var Tabla = document.getElementById(Tablax);
+
+    if (Tabla.rows.length > 1) {
+        CurrentTable.destroy();
+
+        for (var i = Tabla.rows.length - 1; i > 0; i--) {
+            Tabla.deleteRow(i);
+        }
+    }
+
     var Consulta = "";
     switch (tabla) {
         case "TablaPaciente":
@@ -208,6 +309,15 @@ function LlenarTabla(tabla) {
         case "tblRoles":
             Consulta = "select idTipoRol, Nombre, Pacientes, Asistentes, Visitas, Configuraciones from TipoRol where Estado = true";
             break;
+        case "TablaRes":
+            Consulta = "select r.idResidente, p.Cedula,concat(p.Nombre, ' ', p.Apellido1, ' ', p.Apellido2) as Nombre from Residente r inner join Persona p on r.Persona_idPersona = p.idPersona where r.Estado = true";
+            break;
+        case "TablaAsis":
+            Consulta = "select a.idAsistente, concat(p.Nombre, ' ', p.Apellido1, ' ', p.Apellido2) as Nombre, tp.Nombre from Asistente a inner join Persona p on p.idPersona = a.Persona_idPersona inner join TipoAsistente tp on tp.idTipoAsistente = a.TipoAsistente_idTipoAsistente where a.Estado = true";
+            break;
+        case "TablaVisitas":
+            Consulta = "select b.idVisita, concat(day(b.Fecha), '-', month(b.Fecha), '-', year(b.Fecha)) as Fecha, b.Hora, concat(p.Nombre, ' ', p.Apellido1, ' ', p.Apellido2) as Residente, concat(pr.Nombre, ' ', pr.Apellido1, ' ', pr.Apellido2) as Visitante from Bitacora b inner join Residente r on b.idResidente =  r.idResidente INNER JOIN Persona p on r.Persona_idPersona = p.idPersona inner join Visitante v on b.idVisitante =  v.idVisitante INNER JOIN Persona pr on v.Persona_idPersona = pr.idPersona where b.Estado = true";
+            break;
         default:
             break;
     }
@@ -216,7 +326,19 @@ function LlenarTabla(tabla) {
 }
 
 function LlenarTablaGeneral(tipo) {
+    MostrarModalCargando();
     Tablax = "tblGeneral";
+
+    var Tabla = document.getElementById("tblGeneral");
+
+    if (Tabla.rows.length > 1) {
+        CurrentTable.destroy();
+
+        for (var i = Tabla.rows.length - 1; i > 0 ; i--) {
+            Tabla.deleteRow(i);
+        }
+    }
+
     var Consulta = "";
     switch (tipo) {
         case "TipoArticulo":
@@ -237,7 +359,7 @@ function LlenarTablaGeneral(tipo) {
     Request(Consulta, "LlenarTabla");
 }
 
-let idioma =
+var idioma =
 {
     "sProcessing": "Procesando...",
     "sLengthMenu": "Mostrar _MENU_ registros",
@@ -277,12 +399,7 @@ let idioma =
 };
 
 function CargarDatatable(tabla) {
-    $('#' + tabla).DataTable({
-        dom: 'Bfrtip',
-        buttons: [
-            'excelHtml5',
-            'pdfHtml5'
-        ],
+    CurrentTable = $('#' + tabla).DataTable({
         "paging": true,
         "lengthChange": true,
         "searching": true,
@@ -292,4 +409,17 @@ function CargarDatatable(tabla) {
         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Mostrar Todo"]],
         "language": idioma
     });
+}
+
+function MostrarModalCargando() {    
+    $('#Cargando').modal(
+        {
+            backdrop: 'static',
+            keyboard: false
+        }        
+    );
+}
+
+function RecargarPagina() {
+    location.reload();
 }

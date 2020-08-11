@@ -196,88 +196,112 @@ namespace Hogar.Controllers
 
             try
             {
-                string[] Consultas = Query.Split('|');
-                if (Consultas.Length == 2)
+                if (Query.Contains("select idRelacion from AsistenteResidente"))
                 {
-                    string Existe = Consultas[0];
-                    string Insertar = Consultas[1];
+                    string[] Nodo = Query.Split('!');
 
-                    //CONSULTAR SI EXISTE EL REGISTRO
-                    if (Existe != " ")
+                    for (int i = 0; i < Nodo.Length; i++)
                     {
-                        ConsultarSql(Existe, "ExisteConfig");
+
+                        string[] NodoSegundo = Nodo[i].Split('|');
+                        string ndSelect = NodoSegundo[0];
+                        string ndInset = NodoSegundo[1];
+
+                        ConsultarSql(ndSelect, "ExisteConfig");
+                        if (Session["Registro"] == null)
+                        {
+                            ConsultarSql(ndInset, "");
+                        }
+
+                        Session["Registro"] = null;
+                    }
+                }
+                else
+                {
+                    string[] Consultas = Query.Split('|');
+
+                    if (Consultas.Length == 2)
+                    {
+                        string Existe = Consultas[0];
+                        string Insertar = Consultas[1];
+
+                        //CONSULTAR SI EXISTE EL REGISTRO
+                        if (Existe != " ")
+                        {
+                            ConsultarSql(Existe, "ExisteConfig");
+                            if (Session["Registro"] != null)
+                            {
+                                Session["Registro"] = null;
+                                throw new Exception(msj.ErrorRegExiste);
+                            }
+                        }
+
+                        if (Query.Contains("SELECT idNumTelefono FROM NumTelefono WHERE Telefono") ||
+                            Query.Contains("SELECT idUsuarios FROM Usuario WHERE Usuario") ||
+                            Query.Contains(" |INSERT INTO Asistente"))
+                        {
+                            Insertar = string.Format(Insertar, Convert.ToInt32(Session["IdRegistro"].ToString()));
+                        }
+
+                        if (Query.Contains(" |INSERT INTO Articulos"))
+                        {
+                            Insertar = string.Format(Insertar, Convert.ToInt32(Session["IdExp"].ToString()));
+                        }
+
+                        //INSERTAR EL REGISTRO
+                        ConsultarSql(Insertar, "");
+
+                        if (Query.Contains("Persona") && Query.Contains("Cedula"))
+                        {
+                            ConsultarSql(Existe, "ObtenerID");
+                        }
+                    }
+                    else if (Consultas.Length == 3)
+                    {
+                        string Select = Consultas[0];
+                        string Insert = Consultas[1];
+                        string InsertParient = Consultas[2];
+
+                        ConsultarSql(Select, "ExisteConfig");
                         if (Session["Registro"] != null)
                         {
                             Session["Registro"] = null;
                             throw new Exception(msj.ErrorRegExiste);
                         }
+
+                        ConsultarSql(Insert, "");
+                        ConsultarSql(Select, "ObtenerID");
+                        if (Session["IdRegistro"] != null)
+                        {
+                            InsertParient = string.Format(InsertParient, Session["IdRegistro"].ToString());
+                        }
+                        ConsultarSql(InsertParient, "");
                     }
-
-                    if (Query.Contains("SELECT idNumTelefono FROM NumTelefono WHERE Telefono") ||
-                        Query.Contains("SELECT idUsuarios FROM Usuario WHERE Usuario") ||
-                        Query.Contains(" |INSERT INTO Asistente"))
+                    else if (Consultas.Length == 4)
                     {
-                        Insertar = string.Format(Insertar, Convert.ToInt32(Session["IdRegistro"].ToString()));
-                    }
+                        string InsertResidente = Consultas[0];
+                        string SelectResidente = Consultas[1];
+                        string InsertExpediente = Consultas[2];
+                        string SelectExpediente = Consultas[3];
 
-                    if (Query.Contains(" |INSERT INTO Articulos"))
-                    {
-                        Insertar = string.Format(Insertar, Convert.ToInt32(Session["IdExp"].ToString()));
-                    }
+                        InsertResidente = string.Format(InsertResidente, Convert.ToInt32(Session["IdRegistro"].ToString()));
+                        ConsultarSql(InsertResidente, "");
 
-                    //INSERTAR EL REGISTRO
-                    ConsultarSql(Insertar, "");
+                        SelectResidente = string.Format(SelectResidente, Convert.ToInt32(Session["IdRegistro"].ToString()));
+                        ConsultarSql(SelectResidente, "SelectResidente");
 
-                    if (Query.Contains("Persona") && Query.Contains("Cedula"))
-                    {
-                        ConsultarSql(Existe, "ObtenerID");
-                    }
-                }
-                else if (Consultas.Length == 3)
-                {
-                    string Select = Consultas[0];
-                    string Insert = Consultas[1];
-                    string InsertParient = Consultas[2];
+                        if (Session["IdRes"] != null)
+                        {
+                            InsertExpediente = string.Format(InsertExpediente, Convert.ToInt32(Session["IdRes"].ToString()), Convert.ToInt32(Session["IdUsuario"].ToString()));
+                            ConsultarSql(InsertExpediente, "");
 
-                    ConsultarSql(Select, "ExisteConfig");
-                    if (Session["Registro"] != null)
-                    {
-                        Session["Registro"] = null;
-                        throw new Exception(msj.ErrorRegExiste);
-                    }
-
-                    ConsultarSql(Insert, "");
-                    ConsultarSql(Select, "ObtenerID");               
-                    if (Session["IdRegistro"] != null)
-                    {
-                        InsertParient = string.Format(InsertParient, Session["IdRegistro"].ToString());
-                    }
-                    ConsultarSql(InsertParient, "");
-                }
-                else if (Consultas.Length == 4)
-                {
-                    string InsertResidente = Consultas[0];
-                    string SelectResidente = Consultas[1];
-                    string InsertExpediente = Consultas[2];
-                    string SelectExpediente = Consultas[3];
-
-                    InsertResidente = string.Format(InsertResidente, Convert.ToInt32(Session["IdRegistro"].ToString()));
-                    ConsultarSql(InsertResidente, "");
-
-                    SelectResidente = string.Format(SelectResidente, Convert.ToInt32(Session["IdRegistro"].ToString()));
-                    ConsultarSql(SelectResidente, "SelectResidente");
-
-                    if (Session["IdRes"] != null)
-                    {
-                        InsertExpediente = string.Format(InsertExpediente, Convert.ToInt32(Session["IdRes"].ToString()), Convert.ToInt32(Session["IdUsuario"].ToString()));
-                        ConsultarSql(InsertExpediente, "");
-
-                        SelectExpediente = string.Format(SelectExpediente, Convert.ToInt32(Session["IdRes"].ToString()));
-                        ConsultarSql(SelectExpediente, "SelectExpediente");
-                    }
-                    else
-                    {
-                        throw new Exception(msj.ErrorExpediente);
+                            SelectExpediente = string.Format(SelectExpediente, Convert.ToInt32(Session["IdRes"].ToString()));
+                            ConsultarSql(SelectExpediente, "SelectExpediente");
+                        }
+                        else
+                        {
+                            throw new Exception(msj.ErrorExpediente);
+                        }
                     }
                 }
 
@@ -376,7 +400,7 @@ namespace Hogar.Controllers
                         case "Table":
                             var Row = string.Empty;
 
-                            if (Query.Contains("from Residente"))
+                            if (Query.Contains("FROM Residente"))
                             {
                                 Row = string.Format(msj.TablaPaciente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6));
                             }
@@ -384,7 +408,7 @@ namespace Hogar.Controllers
                             {
                                 Row = string.Format(msj.TablaPariente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5));
                             }
-                            if (Query.Contains("from Asistente"))
+                            if (Query.Contains("select a.idAsistente, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, ta.Nombre, a.Entrada, a.Salida from Asistente a"))
                             {
                                 Row = string.Format(msj.TablaAsistente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
                             }
@@ -399,6 +423,18 @@ namespace Hogar.Controllers
                             if (Query.Contains("from TipoArticulo") || Query.Contains("from TipoAsistente") || Query.Contains("from TipoParentesco") || Query.Contains("from TipoTelefono"))
                             {
                                 Row = string.Format(msj.TablaGeneral, reader.GetString(0), reader.GetString(1));
+                            }
+                            if (Query.Contains("from Residente r inner join Persona p"))
+                            {
+                                Row = string.Format(msj.TablaResidente, reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(0), reader.GetString(2));
+                            }
+                            if (Query.Contains("select a.idAsistente, concat(p.Nombre, ' ', p.Apellido1, ' ', p.Apellido2) as Nombre, tp.Nombre from Asistente a"))
+                            {
+                                Row = string.Format(msj.TablaAsignar, reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(0), reader.GetString(1));
+                            }
+                            if (Query.Contains("select b.idVisita, concat(day(b.Fecha), '-', month(b.Fecha), '-', year(b.Fecha)) as Fecha, b.Hora"))
+                            {
+                                Row = string.Format(msj.TablaVisita, reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
                             }
 
                             cmbOptions.Add(Row);
@@ -452,8 +488,11 @@ namespace Hogar.Controllers
         public string TablaPariente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Telefono'>{3}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick=''>Modificar</button></td></tr>";
         public string TablaAsistente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Tipo'>{3}</td><td data-label='Entrada'>{4}</td><td data-label='Salida'>{5}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick='ProcesosAsignar()'>Seleccionar</button></td></tr>";
         public string TablaUsuario = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Usuario'>{3}</td><td data-label='Rol'>{4}</td><td data-label='Acciones'><button type='button' class='btn btn-default' onclick=''>Modificar</button></td><td data-label='Acciones'><button type='button' class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
-        public string TablaRoles = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Residentes'>{2}</td><td data-label='Asistentes'>{3}</td><td data-label='Visitas'>{4}</td><td data-label='Configuraciones'>{5}</td><td data-label='Accion'><button type='button' class='btn btn-default' onclick=''>Modificar</button></td><td data-label='Accion'><button type='button' class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
-        public string TablaGeneral = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Acciones'><button type='button' class='btn btn-default' onclick=''>Modificar</button></td><td data-label='Acciones'><button type='button'class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
+        public string TablaRoles = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Residentes'>{2}</td><td data-label='Asistentes'>{3}</td><td data-label='Visitas'>{4}</td><td data-label='Configuraciones'>{5}</td><td data-label='Accion'><button type='button' class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
+        public string TablaGeneral = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Acciones'><button type='button'class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
+        public string TablaResidente = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td><button type='button' class='btn btn-success' onclick='ProcesosAsignar({3}, \"{4}\")'>Seleccionar</button></td></tr>";
+        public string TablaAsignar = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td><button type='button' class='btn btn-success' onclick='AgregarAsistente({3}, \"{4}\")'>Asignar</button></td></tr>";        
+        public string TablaVisita = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td><button type='button' class='btn btn-danger' onclick=''>Cancelar</button></td></tr>";
     }
 
     public class Combox

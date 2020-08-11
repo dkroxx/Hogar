@@ -27,7 +27,7 @@ var IndiceGeneral = 0;
 
 function AgregarNuevoRegistro() {
     if (txtDescripcion.value.length > 1) {
-        //DESABILITAR BOTONES
+        MostrarModalCargando();
         blockCampos(true, "AgregarNuevoRegistro");
 
         var Consulta = "";
@@ -106,6 +106,7 @@ var chkEstadoRol = document.getElementById('EstadoRol');
 
 function AgregarNuevoRol() {
     if (txtNmRol.value.length > 0) {
+        MostrarModalCargando();
         blockCampos(true, "AgregarNuevoRol");
         var Residente = cmbResidente.selectedIndex;
         var Visitas = cmbVisitas.selectedIndex;
@@ -128,6 +129,7 @@ var chkEstadoPersona = document.getElementById('EstadoPersona');
 
 function AgregarNuevaPersona() {
     if ((txtCedula.value.length > 8 && txtCedula.value.length < 15) && txtNombre.value.length > 0 && txtApellido1.value.length > 0 && txtApellido2.value.length > 0) {
+        MostrarModalCargando();
         blockCampos(true, "AgregarNuevaPersona");
         var Consulta = `SELECT idPersona FROM Persona WHERE Cedula LIKE '${txtCedula.value}' | INSERT INTO Persona(Cedula, Nombre, Apellido1, Apellido2, Estado) VALUES('${txtCedula.value}', '${txtNombre.value}', '${txtApellido1.value}', '${txtApellido2.value}', true)`;
         Request(Consulta, "InsertBasico");
@@ -155,6 +157,7 @@ function AgregarNuevoTelefono() {
     var TipoTelefono = $("#TipoTelefono").val();
 
     if (NumTelefono.length == 8 && TipoTelefono != 0) {
+        MostrarModalCargando();
         blockCampos(true, "AgregarNuevaTelefono");
         var Consulta = `SELECT idNumTelefono FROM NumTelefono WHERE Telefono = '${NumTelefono}'|INSERT INTO NumTelefono (Telefono, Estado, Persona_idPersona, TipoTelefono_idTipoTelefono) VALUES ('${NumTelefono}', TRUE, {0}, ${TipoTelefono})`;
         Request(Consulta, "InsertBasico");
@@ -187,6 +190,7 @@ function AgregarNuevoUsuario() {
         if (Contra1.length > 5 && Contra2.length > 5) {
 
             if (Contra1 == Contra2) {
+                MostrarModalCargando();
                 blockCampos(true, "AgregarNuevoUsuario");
                 var Consulta = `SELECT idUsuarios FROM Usuario WHERE Usuario = '${Usuario}'|INSERT INTO Usuario (Usuario, Contrasena, Estado, Persona_idPersona, TipoRol_idTipoRol) VALUES('${Usuario}', '${Contra1}', TRUE, {0}, '${TipoRol}')`;
                 Request(Consulta, "InsertBasico");
@@ -247,6 +251,7 @@ function FinalizarRegistroUsuario() {
 function MostrarConfigUsuario() {
     OcultarTablaConfig("Usuarios");
     if (document.getElementById('tblMostrarUsuarios').rows.length == 1) {
+        MostrarModalCargando();
         LlenarTabla("tblMostrarUsuarios");
     }    
     EdicionUsuario.style.display = "block";
@@ -260,6 +265,7 @@ function MostrarConfigRol() {
     BtnAtras.style.display = "block";
     BtnCrearRol.style.display = "block";
     if (document.getElementById('tblRoles').rows.length == 1) {
+        MostrarModalCargando();
         LlenarTabla("tblRoles");
     }  
 }
@@ -341,18 +347,4 @@ function OcultarFormularios() {
     EdicionUsuario.style.display = "none";
     EdicionRoles.style.display = "none"
     Titulo.innerHTML = "Configuración del sistema";
-}
-
-var formulario1 = document.getElementById('formCrearAprobacion');
-
-function crear() {
-    formulario1.style.display = "none"
-}
-
-function modificar() {
-    formulario1.style.display = "none"
-}
-
-function eliminar() {
-    formulario1.style.display = "none"
 }

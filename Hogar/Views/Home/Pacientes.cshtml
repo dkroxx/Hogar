@@ -9,6 +9,7 @@
 <ul class="nav nav-tabs">
     <li id="tbPacientes" onclick="clickPacientes()" class="active"><a>Residentes</a></li>
     <li id="tbParientes" onclick="clickParientes()"><a>Parientes</a></li>
+    <li id="tbAsociar" onclick="clickAsociar()"><a>Relacionar residentes</a></li>
 </ul>
 
 <div class="col-lg-12">
@@ -53,6 +54,45 @@
         </div>
     </div>
 
+    <div id="MarcoAsignar" class="col-lg-12" style="display:none;">
+
+        <div id="tblAsignar" class="col-lg-12" style="margin-top:10px;">
+            <h4>Relacionar Residente con Pariente</h4>
+            <div class="col-lg-12">
+
+                <form>
+                    <div class="col-lg-4">
+                        <div class="form-group" align="center">
+                            <label for="cmbResidente">Residente</label>
+                            <select class="form-control" id="cmbResidente">
+                                <option>Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group" align="center">
+                            <label for="cmbParentesco">Parentesco</label>
+                            <select class="form-control" id="cmbParentesco">
+                                <option>Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="form-group" align="center">
+                            <label for="cmbPariente">Pariente</label>
+                            <select class="form-control" id="cmbPariente">
+                                <option>Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-12" align="right">
+                        <button type="button" class="btn btn-success" onclick="GuardarRelacion()">Relacionar</button>
+                    </div>                    
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="MarcoRegistro">
 
         <div id="InfoPersona" class="col-lg-12" align="center" style="display: none; margin-top:10px;">
@@ -60,26 +100,26 @@
             <form>
                 <div class="form-group">
                     <label for="Cedula">Cédula</label>
-                    <input type="text" class="form-control" id="Cedula">
+                    <input type="number" class="form-control" id="Cedula" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==15) return false;">
                 </div>
                 <div class="form-group">
                     <label for="Nombre">Nombre</label>
-                    <input type="text" class="form-control" id="Nombre">
+                    <input type="text" class="form-control" id="Nombre" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Apellido1">Apellido 1</label>
-                    <input type="text" class="form-control" id="Apellido1">
+                    <input type="text" class="form-control" id="Apellido1" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Apellido2">Apellido 2</label>
-                    <input type="text" class="form-control" id="Apellido2">
+                    <input type="text" class="form-control" id="Apellido2" maxlength="15">
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label for="Estado">Estado:</label>
                     <input class="form-check-input" type="checkbox" id="EstadoPersona">
                     <label class="form-check-label" for="EstadoPersona">Activo</label>
                 </div>
-                <button type="button" class="btn btn-danger" onclick="FinalizarRegistro()">Cancelar</button>
+                <button type="button" class="btn btn-danger" onclick="RecargarPagina()">Cancelar</button>
                 <button type="button" class="btn btn-success" onclick="AgregarNuevaPersona()">Continuar</button>
             </form>
         </div>
@@ -90,7 +130,7 @@
                 <form>
                     <div class="form-group" align="center">
                         <label for="NumeroTel">Teléfono</label>
-                        <input type="text" class="form-control" id="NumeroTel">
+                        <input type="number" class="form-control" id="NumeroTel" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;">
                     </div>
                     <div class="form-group" align="center">
                         <label for="TipoTelefono">Tipo teléfono</label>
@@ -98,7 +138,7 @@
                             <option>Default</option>
                         </select>
                     </div>
-                    <div class="form-group" align="center">
+                    <div class="form-group" align="center" style="display: none;">
                         <label for="EstadoTelefono">Estado</label>
                         <input class="form-check-input" type="checkbox" id="EstadoTelefono">
                         <label class="form-check-label" for="EstadoTelefono">Activo</label>
@@ -108,29 +148,7 @@
                         <button type="button" class="btn btn-default" onclick="ContinuarTelefono()">Continuar</button>
                     </div>
                 </form>
-            </div>
-            <div class="col-lg-12">
-                <h4 style="margin-top:10px;">Lista de contactos</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Teléfonon</th>
-                            <th scope="col">Tipo teléfono</th>
-                            <th scope="col" colspan="2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>88888888</td>
-                            <td>Hogar</td>
-                            <td><button type="button" class="btn btn-default" onclick="Validar()">Modificar</button></td>
-                            <td><button type="button" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            </div>            
         </div>
 
         <div id="InfoExpediente" class="col-lg-12" style="display: none; margin-top:10px;">
@@ -140,15 +158,15 @@
                     <label for="FechaNac">Fecha de nacimiento</label>
                     <input class="form-control" type="date" id="FechaNac" name="trip-start"
                            value="2018-07-22"
-                           min="2018-01-01" max="2018-12-31">
+                           min="1990-01-01" max="2999-12-31">
                 </div>
                 <div class="form-group" align="center">
                     <label for="FechaIng">Fecha de ingreso</label>
                     <input class="form-control" type="date" id="FechaIng" name="trip-start"
                            value="2018-07-22"
-                           min="2018-01-01" max="2018-12-31">
+                           min="1990-01-01" max="2999-12-31">
                 </div>
-                <div class="form-group" align="center">
+                <div class="form-group" align="center" style="display: none;">
                     <label for="EstadoExp">Estado</label>
                     <input class="form-check-input" type="checkbox" id="EstadoExp">
                     <label class="form-check-label" for="EstadoExp">Activo</label>
@@ -165,11 +183,11 @@
                 <form>
                     <div class="form-group" align="center">
                         <label for="ArtDescripcion">Descripción</label>
-                        <input type="text" class="form-control" id="ArtDescripcion">
+                        <input type="text" class="form-control" id="ArtDescripcion" maxlength="15">
                     </div>
                     <div class="form-group" align="center">
                         <label for="Cantidad">Cantidad</label>
-                        <input type="number" class="form-control" id="Cantidad">
+                        <input type="number" class="form-control" id="Cantidad" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==4) return false;">
                     </div>
                     <div class="form-group" align="center">
                         <label for="TipoArticulo">Tipo articulo</label>
@@ -177,38 +195,16 @@
                             <option>Default</option>
                         </select>
                     </div>
-                    <div class="form-group" align="center">
+                    <div class="form-group" align="center" style="display: none;">
                         <label for="EstadoArticulo">Estado:</label>
                         <input class="form-check-input" type="checkbox" id="EstadoArticulo">
                         <label class="form-check-label" for="EstadoArticulo">Activo</label>
                     </div>
                     <div class="form-group" align="center">
                         <button type="button" class="btn btn-success" onclick="GuardarArticulo()">Guardar</button>
-                        <button type="button" class="btn btn-default" onclick="ContinuarArticulo()">Continuar</button>
+                        <button type="button" class="btn btn-default" onclick="RecargarPagina()">Continuar</button>
                     </div>
                 </form>
-            </div>
-            <div class="col-lg-12">
-                <h4 style="margin-top:10px;">Lista de articulos</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Teléfonon</th>
-                            <th scope="col">Tipo teléfono</th>
-                            <th scope="col" colspan="2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>88888888</td>
-                            <td>Hogar</td>
-                            <td><button type="button" class="btn btn-default" onclick="">Modificar</button></td>
-                            <td><button type="button" class="btn btn-danger" onclick="">Eliminar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -302,5 +298,15 @@
     </div>
 </div>
 
+<div class="modal fade" id="Cargando" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" align="center">
+                <img src="~/Images/loading.gif" alt="Cargando" style="width:100px; height:100px;" />
+                <p id="MensajeModal">Procesando...</p>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="~/Scripts/Funciones/Pacientes.js"></script>

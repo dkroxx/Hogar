@@ -38,103 +38,55 @@
 
         <div id="TablaResidente" class="col-lg-12" style="margin-top:10px;">
             <h4>Residentes registrados</h4>
-            <form class="form-inline" style="margin-top: 15px; margin-bottom: 15px;">
-                <div class="form-group">
-                    <label for="BuscarResidente">Buscar residente: </label>
-                    <input type="text" class="form-control" id="BuscarResidente">
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-default" onclick="BuscarPariente()">Buscar</button>
-                </div>
-            </form>
-            <table class="table">
+
+            <table id="TablaRes" class="display">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
                         <th scope="col">Cedula</th>
                         <th scope="col">Nombre completo</th>
-                        <th scope="col">Fecha ingreso</th>
                         <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th>1</th>
-                        <td>101110111</td>
-                        <td>Gonzalo Madril</td>
-                        <td>10-08-2020</td>
-                        <td><button type="button" class="btn btn-success" onclick="ProcesosAsignar()">Seleccionar</button></td>
-                    </tr>
-                </tbody>
             </table>
         </div>
 
         <div id="AccionAsignacion" style="display:none;">
-            <div id="TablaAsistentes" class="col-lg-6" style="margin-top:10px;">
+            <div class="col-lg-12" style="margin-top: 20px;">
+                <h4 id="txtResidente"></h4>
+            </div>
+
+            <div id="TablaAsistentes" class="col-lg-12" style="margin-top:10px;">
                 <h4>Lista de asistentes</h4>
-                <form class="form-inline" style="margin-top:15px; margin-bottom:10px;">
-                    <div class="form-group">
-                        <label for="BuscarAsistente">Buscar asistente: </label>
-                        <input type="text" class="form-control" id="BuscarAsistente">
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-default" onclick="BuscarPariente()">Buscar</button>
-                    </div>
-                </form>
-                <table class="table">
+                <table id="TablaAsis" class="display">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Cedula</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Nombre completo</th>
                             <th scope="col">Tipo</th>
                             <th scope="col">Acción</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>101110111</td>
-                            <td>Noelia Segura</td>
-                            <td>Enfermera</td>
-                            <td>
-                                <button type="button" class="btn btn-success" onclick="">Asignar</button>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
             </div>
 
-            <div id="TablaAsignados" class="col-lg-6" style="margin-top:10px;">
+            <div id="TablaAsignados" class="col-lg-12" style="margin-top:20px; display: none;">
                 <h4>Asistentes asignados</h4>
-                <div class="form-inline" style="margin-top:15px; margin-bottom:10px;">
-                    <div class="form-group">
-                        <button type="button" class="btn btn-success" onclick="">Guardar</button>
-                    </div>
-                </div>
-                <table class="table">
+                <table id="TablaAsig" class="display">
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Cedula</th>
+                            <th scope="col">ID</th>
                             <th scope="col">Nombre completo</th>
-                            <th scope="col">Tipo</th>
                             <th scope="col">Acción</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>101110111</td>
-                            <td>Noelia Segura</td>
-                            <td>Enfermera</td>
-                            <td>
-                                <button type="button" class="btn btn-danger" onclick="">Eliminar</button>
-                            </td>
-                        </tr>
-                    </tbody>
                 </table>
+
+                <div class="col-lg-12" align="right" style="margin-top:10px;">
+                    <button type="button" class="btn btn-success" onclick="GuardarRelacionAsistente()">Asignar asistentes</button>
+                </div>                
             </div>
+
         </div>
     </div>
 
@@ -144,21 +96,21 @@
             <form>
                 <div class="form-group">
                     <label for="Cedula">Cédula</label>
-                    <input type="text" class="form-control" id="Cedula">
+                    <input type="number" class="form-control" id="Cedula" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==15) return false;">
                 </div>
                 <div class="form-group">
                     <label for="Nombre">Nombre</label>
-                    <input type="text" class="form-control" id="Nombre">
+                    <input type="text" class="form-control" id="Nombre" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Apellido1">Apellido 1</label>
-                    <input type="text" class="form-control" id="Apellido1">
+                    <input type="text" class="form-control" id="Apellido1" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Apellido2">Apellido 2</label>
-                    <input type="text" class="form-control" id="Apellido2">
+                    <input type="text" class="form-control" id="Apellido2" maxlength="15">
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display: none">
                     <label for="EstadoPersona">Estado:</label>
                     <input class="form-check-input" type="checkbox" id="EstadoPersona">
                     <label class="form-check-label" for="EstadoPersona">Activo</label>
@@ -174,7 +126,7 @@
                 <form>
                     <div class="form-group" align="center">
                         <label for="NumeroTel">Teléfono</label>
-                        <input type="text" class="form-control" id="NumeroTel">
+                        <input type="number" class="form-control" id="NumeroTel" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;">
                     </div>
                     <div class="form-group" align="center">
                         <label for="TipoTelefono">Tipo teléfono</label>
@@ -182,7 +134,7 @@
                             <option>Default</option>
                         </select>
                     </div>
-                    <div class="form-group" align="center">
+                    <div class="form-group" align="center" style="display: none">
                         <label for="EstadoTelefono">Estado</label>
                         <input class="form-check-input" type="checkbox" id="EstadoTelefono">
                         <label class="form-check-label" for="EstadoTelefono">Activo</label>
@@ -193,28 +145,6 @@
                     </div>
                 </form>
             </div>
-            <div class="col-lg-12">
-                <h4 style="margin-top:10px;">Lista de contactos</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Teléfonon</th>
-                            <th scope="col">Tipo teléfono</th>
-                            <th scope="col" colspan="2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>88888888</td>
-                            <td>Hogar</td>
-                            <td><button type="button" class="btn btn-default" onclick="">Modificar</button></td>
-                            <td><button type="button" class="btn btn-danger" onclick="">Eliminar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
 
         <div id="InfoAsistente" class="col-lg-12" style="display: none; margin-top:10px;">
@@ -223,13 +153,14 @@
                 <div class="form-group" align="center">
                     <label for="TipoAsistente">Tipo asistente</label>
                     <select class="form-control" id="TipoAsistente">
+                        <option>Default</option>
                     </select>
                 </div>
                 <div class="form-group" align="center" hidden>
                     <label for="FechIngreso">Ingreso</label>
                     <input class="form-control" type="date" id="FechIngreso" name="trip-start"
                            value="2018-07-22"
-                           min="2018-01-01" max="2018-12-31">
+                           min="1990-01-01" max="2999-12-31">
                 </div>
                 <div class="form-group" align="center">
                     <label for="FechEntrada">Entrada</label>
@@ -239,7 +170,7 @@
                     <label for="FechSalida">Salida</label>
                     <input class="form-control" type="time" id="FechSalida" value="17:00" min="05:00" max="20:00" name="trip-start" />
                 </div>
-                <div class="form-group" align="center" hidden>
+                <div class="form-group" align="center" style="display: none">
                     <label for="EstadoAsistente">Estado: </label>
                     <input class="form-check-input" type="checkbox" id="EstadoAsistente">
                     <label class="form-check-label" for="EstadoAsistente">Activo</label>
@@ -263,6 +194,17 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Cargando" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" align="center">
+                <img src="~/Images/loading.gif" alt="Cargando" style="width:100px; height:100px;" />
+                <p id="MensajeModal">Procesando...</p>
             </div>
         </div>
     </div>
