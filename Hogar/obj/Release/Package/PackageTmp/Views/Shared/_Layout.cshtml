@@ -4,10 +4,21 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Last-Modified" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>    
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf8" src="~/Scripts/DataTables/datatables.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Scripts/DataTables/datatables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.6.2/css/buttons.dataTables.min.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.21/b-1.6.3/b-colvis-1.6.3/b-flash-1.6.3/b-html5-1.6.3/b-print-1.6.3/datatables.min.js"></script>
 </head>
 <body>
     <div class="navbar navbar-default navbar-fixed-top">
@@ -25,9 +36,10 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li>@Html.ActionLink("Residentes", "Pacientes", "Home")</li>
+                        <li>@Html.ActionLink("Asistentes", "Asistentes", "Home")</li>
                         <li>@Html.ActionLink("Visitas", "Visitas", "Home")</li>
-                        <li>@Html.ActionLink("Configuración", "Configuracion", "Home")</li>                        
-                        <li>@Html.ActionLink("Cerrar Sesión", "CerrarSesion", "Home")</li>                                             
+                        <li>@Html.ActionLink("Configuración", "Configuracion", "Home")</li>
+                        <li>@Html.ActionLink("Cerrar Sesión", "CerrarSesion", "Home")</li>
                     </ul>
                 </div>
             </div>
@@ -42,8 +54,9 @@
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    @RenderSection("scripts", required: false)    
+
+    <script src="~/Scripts/Funciones/Compartido.js"></script>
 </body>
 </html>

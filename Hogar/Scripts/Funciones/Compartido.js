@@ -164,6 +164,7 @@ function Request(Query, Metodo) {
                         case "ValidarUsuario":
                             document.getElementById('btnIngresar').style.display = "block";
                             document.getElementById('loading').style.display = "none";
+                            blockCampos(false);
                             break;
                         case "InsertBasico":                            
                             if (Query.includes("TipoArticulo")) {

@@ -7,6 +7,7 @@
 <hr />
 
 <div class="col-lg-12">
+
     <div id="Principal">
         <table class="table">
             <thead>
@@ -20,218 +21,272 @@
                 <tr>
                     <th>Usuarios</th>
                     <td>Permite agregar y modificar usuarios al sistema.</td>
-                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigUsuario()">Modificar</button></td>
+                    <td><button type="button" class="btn btn-success" onclick="MostrarConfigUsuario()">Modificar</button></td>
                 </tr>
                 <tr>
                     <th>Catálogo Rol</th>
                     <td>Permite agregar y modificar el catálogo de roles.</td>
-                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigRol()">Modificar</button></td>
+                    <td><button type="button" class="btn btn-success" onclick="MostrarConfigRol()">Modificar</button></td>
                 </tr>
                 <tr>
                     <th>Catálogo Articulo</th>
                     <td>Permite agregar y modificar el catálogo de articulos.</td>
-                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigArticulo()">Modificar</button></td>
+                    <td><button type="button" class="btn btn-success" onclick="MostrarConfigArticulo()">Modificar</button></td>
                 </tr>
                 <tr>
                     <th>Catálogo Teléfono</th>
                     <td>Permite agregar y modificar el catálogo de telefonos.</td>
-                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigTelefono()">Modificar</button></td>
+                    <td><button type="button" class="btn btn-success" onclick="MostrarConfigTelefono()">Modificar</button></td>
                 </tr>
                 <tr>
                     <th>Catálogo Parentesco</th>
                     <td>Permite agregar y modificar el catálogo de parenteso.</td>
-                    <td><button type="submit" class="btn btn-success" onclick="MostrarConfigParentesco()">Modificar</button></td>
+                    <td><button type="button" class="btn btn-success" onclick="MostrarConfigParentesco()">Modificar</button></td>
+                </tr>
+                <tr>
+                    <th>Catálogo Asistente</th>
+                    <td>Permite agregar y modificar el catálogo de asistentes.</td>
+                    <td><button type="button" class="btn btn-success" onclick="MostrarConfigAsistente()">Modificar</button></td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <div class="col-lg-1" align="left">
-        <button id="btnAtras" type="button" class="btn btn-default" onclick="OcultarFormularios()" style="margin:10px; display:none;">Volver</button>
+        <button id="btnAtras" type="button" class="btn btn-default" onclick="OcultarFormularios()" style="display:none;">Volver</button>        
     </div>
     <div class="col-lg-11" align="left">
-        <button id="btnCrear" type="button" class="btn btn-success" onclick="AgregarPersona()" style="margin:10px; display:none;">Agregar usuario</button>
+        <button id="btnCrear" type="button" class="btn btn-success" onclick="AgregarPersona()" style="display:none;">Agregar usuario</button>
+        <button id="btnCrearRol" type="button" class="btn btn-success" onclick="AgregarRol()" style="display:none;">Agregar rol</button>
     </div>
 
-    <div id="EdicionGeneral" style="display: none;" class="col-lg-12">
+    <div id="EdicionGeneral" style="display: none; margin-top:10px;" class="col-lg-12">
         <div class="col-lg-12">
-            <h4 style="margin-top:25px;">Agregar un registro</h4>
-            <form class="form-inline" style="margin-bottom:5px;">
-                <div class="col-lg-4" align="center">
-                    <div class="form-group">
-                        <label for="DescripcionGeneral">Descripcion: </label>
-                        <input type="text" class="form-control" id="DescripcionGeneral">
-                    </div>
+            <h4>Agregar un registro</h4>
+            <form style="margin-bottom:5px;">
+                <div class="form-group" align="center">
+                    <label for="DescripcionGeneral">Descripcion: </label>
+                    <input type="text" class="form-control" id="DescripcionGeneral" maxlength="15">
                 </div>
-                <div class="col-lg-4" align="center">
-                    <div class="form-group">
-                        <label for="EstadoGeneral">Estado: </label>
-                        <input class="form-check-input" type="checkbox" id="EstadoGeneral">
-                        <label class="form-check-label" for="EstadoGeneral">Activo</label>
-                    </div>
+                <div class="form-group" align="center" style="display: none;">
+                    <label for="EstadoGeneral">Estado: </label>
+                    <input class="form-check-input" type="checkbox" id="EstadoGeneral" checked disabled>
+                    <label class="form-check-label" for="EstadoGeneral">Activo</label>
                 </div>
-                <div class="col-lg-4" align="center">
-                    <button type="button" class="btn btn-success">Guardar</button>
+                <div class="form-group" align="center">
+                    <button id="btnNuevoRegistro" type="button" class="btn btn-success" onclick="AgregarNuevoRegistro()">Guardar</button>
                 </div>
             </form>
         </div>
         <div class="col-lg-12">
             <h4 style="margin-top:25px;">Lista de registros</h4>
-            <table class="table">
+            <table id="tblGeneral" class="display">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
                         <th scope="col">Descripción</th>
-                        <th scope="col" colspan="2">Acciones</th>
+                        <th scope="col">Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="EdicionRoles" style="display: none; margin-top:10px;" class="col-lg-12">
+        
+        <div id="formRol" class="col-lg-12" style="display: none;">
+            <h4 text-align:left;">Agregar rol</h4>
+            <form class="col-lg-12" align="center">
+                <div class="form-group" align="center">
+                    <label for="NomRol">Descripción</label>
+                    <input type="text" class="form-control" id="NomRol" maxlength="15">
+                </div>
+                <div class="form-group" align="center">
+                    <label for="PerResidente">Permisos</label>
+                    <label for="PerResidente">Acceso a residentes</label>
+                    <select class="form-control" id="PerResidente">
+                        <option>Bloquear</option>
+                        <option>Permitir</option>
+                    </select>
+                </div>
+                <div class="form-group" align="center">
+                    <label for="PerAsistente">Acceso a asistentes</label>
+                    <select class="form-control" id="PerAsistente">
+                        <option>Bloquear</option>
+                        <option>Permitir</option>
+                    </select>
+                </div>
+                <div class="form-group" align="center">
+                    <label for="PerVisitas">Acceso a visitas</label>
+                    <select class="form-control" id="PerVisitas">
+                        <option>Bloquear</option>
+                        <option>Permitir</option>
+                    </select>
+                </div>
+                <div class="form-group" align="center">
+                    <label for="PerConfiguraciones">Acceso a configuraciones</label>
+                    <select class="form-control" id="PerConfiguraciones">
+                        <option>Bloquear</option>
+                        <option>Permitir</option>
+                    </select>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label for="EstadoRol">Estado: </label>
+                    <input class="form-check-input" type="checkbox" id="EstadoRol" checked disabled>
+                    <label class="form-check-label" for="EstadoRol">Activo</label>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="FinalizarRegistroRol()">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="AgregarNuevoRol()">Guardar</button>
+            </form>
+        </div>
+
+        <div id="tblRol" class="col-lg-12" style="margin-top:10px;">
+            <h4>Lista de roles</h4>
+            <table id="tblRoles" class="display">
+                <thead>
                     <tr>
-                        <th>1</th>
-                        <td>Descripcion del catálogo</td>
-                        <td><button type="submit" class="btn btn-default" onclick="Validar()">Modificar</button></td>
-                        <td><button type="submit" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
+                        <th scope="col">ID</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Residentes</th>
+                        <th scope="col">Asistentes</th>
+                        <th scope="col">Visitas</th>
+                        <th scope="col">Configuraciones</th>
+                        <th scope="col">Accion</th>
                     </tr>
-                </tbody>
+                </thead>
             </table>
         </div>
     </div>
 
     <div id="EdicionUsuario" style="display: none;" class="col-lg-12">
-        <div id="TablaUsuarios">
-            <h4 style="margin-top:20px; text-align:left;">Lista de usuarios</h4>
-            <table class="table">
+        <div id="TablaUsuarios" class="col-lg-12" style="margin-top:10px;">
+            <h4 style="text-align:left;">Lista de usuarios</h4>
+            <table id="tblMostrarUsuarios" class="display">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
                         <th scope="col">Usuario</th>
-                        <th scope="col">Nombre</th>
                         <th scope="col">Rol</th>
-                        <th scope="col" colspan="2">Acciones</th>
+                        <th scope="col">Acciones</th>
+                        <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th>1</th>
-                        <td>Usuario</td>
-                        <td>Jane Doe</td>
-                        <td>Admin</td>
-                        <td><button type="submit" class="btn btn-default" onclick="Validar()">Modificar</button></td>
-                        <td><button type="submit" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
-                    </tr>
-                </tbody>
             </table>
         </div>
-        <div id="InfoPersona" class="col-lg-12" align="center" style="display: none;">
-            <h4 style="margin-top:20px; text-align:left;">Información personal</h4>
+
+        <div id="InfoPersona" class="col-lg-12" align="center" style="display: none; margin-top:10px;">
+            <h4 style="text-align:left;">Información personal</h4>
             <form>
                 <div class="form-group">
                     <label for="Cedula">Cédula</label>
-                    <input type="text" class="form-control" id="Cedula">
+                    <input type="number" class="form-control" id="Cedula" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==15) return false;">
                 </div>
                 <div class="form-group">
                     <label for="Nombre">Nombre</label>
-                    <input type="text" class="form-control" id="Nombre">
+                    <input type="text" class="form-control" id="Nombre" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Apellido1">Apellido 1</label>
-                    <input type="text" class="form-control" id="Apellido1">
+                    <input type="text" class="form-control" id="Apellido1" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Apellido2">Apellido 2</label>
-                    <input type="text" class="form-control" id="Apellido2">
+                    <input type="text" class="form-control" id="Apellido2" maxlength="15">
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label for="Estado">Estado:</label>
-                    <input class="form-check-input" type="checkbox" id="Estado">
-                    <label class="form-check-label" for="Estado">Activo</label>
+                    <input class="form-check-input" type="checkbox" id="EstadoPersona">
+                    <label class="form-check-label" for="EstadoPersona">Activo</label>
                 </div>
                 <button type="button" class="btn btn-danger" onclick="FinalizarRegistroUsuario()">Cancelar</button>
-                <button type="button" class="btn btn-success" onclick="AgregarTelefono()">Guardar y continuar</button>
+                <button type="button" class="btn btn-success" onclick="AgregarNuevaPersona()">Guardar y continuar</button>
             </form>
         </div>
-        <div id="InfoTelefono" style="display: none;">
+
+        <div id="InfoTelefono" style="display: none; margin-top:10px;">
             <div class="col-lg-12">
-                <h4 style="margin-top:20px;">Información de contacto</h4>
-                <form class="form-inline">
-                    <div class="col-lg-4" align="center">
-                        <div class="form-group mb-2">
-                            <label for="NumeroTel">Teléfono</label>
-                            <input type="text" class="form-control" id="NumeroTel">
-                        </div>
+                <h4>Información de contacto</h4>
+                <form >
+                    <div class="form-group" align="center">
+                        <label for="NumeroTel">Teléfono</label>
+                        <input type="number" class="form-control" id="NumeroTel" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;">
                     </div>
-                    <div class="col-lg-3" align="center">
-                        <div class="form-group mb-2">
-                            <label for="TipoTelefono">Tipo teléfono</label>
-                            <select class="form-control" id="TipoTelefono">
-                                <option>Default</option>
-                            </select>
-                        </div>
+                    <div class="form-group" align="center">
+                        <label for="TipoTelefono">Tipo teléfono</label>
+                        <select class="form-control" id="TipoTelefono">
+                            <option>Default</option>
+                        </select>
                     </div>
-                    <div class="col-lg-2" align="center">
-                        <div class="form-group mb-2">
-                            <label for="EstadoTelefono">Estado</label>
-                            <input class="form-check-input" type="checkbox" id="EstadoTelefono">
-                            <label class="form-check-label" for="EstadoTelefono">Activo</label>
-                        </div>
-                    </div>                    
-                    <div class="col-lg-3" align="center">
-                        <button type="button" class="btn btn-success" onclick="">Agregar</button>
+                    <div class="form-group" align="center" style="display: none;">
+                        <label for="EstadoTelefono">Estado</label>
+                        <input class="form-check-input" type="checkbox" id="EstadoTelefono">
+                        <label class="form-check-label" for="EstadoTelefono">Activo</label>
+                    </div>
+                    <div class="form-group" align="center">
+                        <button type="button" class="btn btn-success" onclick="AgregarNuevoTelefono()">Agregar</button>
                         <button type="button" class="btn btn-default" onclick="AgregarUsuario()">Continuar</button>
                     </div>
                 </form>
             </div>
-            <div class="col-lg-12">
-                <h4 style="margin-top:20px;">Lista de registros</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Teléfonon</th>
-                            <th scope="col">Tipo teléfono</th>
-                            <th scope="col" colspan="2">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th>1</th>
-                            <td>88888888</td>
-                            <td>Hogar</td>
-                            <td><button type="submit" class="btn btn-default" onclick="Validar()">Modificar</button></td>
-                            <td><button type="submit" class="btn btn-danger" onclick="Validar()">Eliminar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
         </div>
-        <div id="InfoUsuario" class="col-lg-12" align="center" style="display: none;">
-            <h4 style="margin-top:20px; text-align:left;">Información del usuario</h4>
+
+        <div id="InfoUsuario" class="col-lg-12" align="center" style="display: none; margin-top:10px;">
+            <h4 text-align:left;">Información del usuario</h4>
             <form>
                 <div class="form-group">
                     <label for="Usuario">Usuario</label>
-                    <input type="text" class="form-control" id="Usuario">
+                    <input type="text" class="form-control" id="Usuario" autocomplete="off" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Contrasena">Contraseña</label>
-                    <input type="password" class="form-control" id="Contrasena">
+                    <input type="password" class="form-control" id="Contrasena" autocomplete="off" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="ContrasenaRepita">Repita la contraseña</label>
-                    <input type="password" class="form-control" id="ContrasenaRepita">
+                    <input type="password" class="form-control" id="ContrasenaRepita" autocomplete="off" maxlength="15">
                 </div>
                 <div class="form-group">
                     <label for="Rol">Rol</label>
                     <select class="form-control" id="Rol">
-                        <option>Default</option>
+                        <option value="0">Seleccione</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div class="form-group" style="display: none;">
                     <label for="EstadoUsuario">Estado</label>
                     <input class="form-check-input" type="checkbox" id="EstadoUsuario">
                     <label class="form-check-label" for="EstadoUsuario">Activo</label>
                 </div>
-                <button type="button" class="btn btn-success" onclick="FinalizarRegistroUsuario()">Guardar y finalizar</button>
+                <button type="button" class="btn btn-success" onclick="AgregarNuevoUsuario()">Guardar y finalizar</button>
             </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="MensajeAlerta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Atención</h5>
+            </div>
+            <div class="modal-body">
+                <p id="MensajeModal"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Cargando" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" align="center">
+                <img src="~/Images/loading.gif" alt="Cargando" style="width:100px; height:100px;" />
+                <p id="MensajeModal">Procesando...</p>
+            </div>
         </div>
     </div>
 </div>

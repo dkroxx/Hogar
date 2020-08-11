@@ -1,0 +1,213 @@
+﻿
+@{
+    ViewBag.Title = "Asistentes";
+}
+
+<h3 id="TituloConfig">Asistentes / Lista de asistentes</h3>
+<hr />
+
+<ul class="nav nav-tabs">
+    <li id="tbAsistente" onclick="clickAsistente()" class="active"><a>Asistentes</a></li>
+    <li id="tbAsignar" onclick="clickAsignarAsistente()"><a>Asignar asistentes</a></li>
+</ul>
+
+<div class="col-lg-12">
+    <div id="MarcoAsistentes" class="col-lg-12" style="display: block;">
+        <div class="col-lg-12" align="left">
+            <button id="btnCrearAsistente" type="button" class="btn btn-success" onclick="AgregarPersona()" style="margin-top:25px;">Agregar asistente</button>
+        </div>
+        <div id="tblAsistentes" class="col-lg-12" style="margin-top:10px;">
+            <h4>Asistentes registrados</h4>
+            <table id="TablaAsistente" class="display">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Entrada</th>
+                        <th scope="col">Salida</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>                
+            </table>
+        </div>
+    </div>
+
+    <div id="MarcoAsignar" class="col-lg-12" style="display: none; margin-top:25px;">
+
+        <div id="TablaResidente" class="col-lg-12" style="margin-top:10px;">
+            <h4>Residentes registrados</h4>
+
+            <table id="TablaRes" class="display">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Cedula</th>
+                        <th scope="col">Nombre completo</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+
+        <div id="AccionAsignacion" style="display:none;">
+            <div class="col-lg-12" style="margin-top: 20px;">
+                <h4 id="txtResidente"></h4>
+            </div>
+
+            <div id="TablaAsistentes" class="col-lg-12" style="margin-top:10px;">
+                <h4>Lista de asistentes</h4>
+                <table id="TablaAsis" class="display">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre completo</th>
+                            <th scope="col">Tipo</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div id="TablaAsignados" class="col-lg-12" style="margin-top:20px; display: none;">
+                <h4>Asistentes asignados</h4>
+                <table id="TablaAsig" class="display">
+                    <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Nombre completo</th>
+                            <th scope="col">Acción</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div class="col-lg-12" align="right" style="margin-top:10px;">
+                    <button type="button" class="btn btn-success" onclick="GuardarRelacionAsistente()">Asignar asistentes</button>
+                </div>                
+            </div>
+
+        </div>
+    </div>
+
+    <div id="MarcoRegistro" class="col-lg-12">
+        <div id="InfoPersona" class="col-lg-12" align="center" style="display: none; margin-top:10px;">
+            <h4 style="text-align:left;">Formulario del información personal</h4>
+            <form>
+                <div class="form-group">
+                    <label for="Cedula">Cédula</label>
+                    <input type="number" class="form-control" id="Cedula" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==15) return false;">
+                </div>
+                <div class="form-group">
+                    <label for="Nombre">Nombre</label>
+                    <input type="text" class="form-control" id="Nombre" maxlength="15">
+                </div>
+                <div class="form-group">
+                    <label for="Apellido1">Apellido 1</label>
+                    <input type="text" class="form-control" id="Apellido1" maxlength="15">
+                </div>
+                <div class="form-group">
+                    <label for="Apellido2">Apellido 2</label>
+                    <input type="text" class="form-control" id="Apellido2" maxlength="15">
+                </div>
+                <div class="form-group" style="display: none">
+                    <label for="EstadoPersona">Estado:</label>
+                    <input class="form-check-input" type="checkbox" id="EstadoPersona">
+                    <label class="form-check-label" for="EstadoPersona">Activo</label>
+                </div>
+                <button type="button" class="btn btn-danger" onclick="FinalizarRegistro()">Cancelar</button>
+                <button type="button" class="btn btn-success" onclick="AgregarNuevaPersona()">Continuar</button>
+            </form>
+        </div>
+
+        <div id="InfoTelefono" style="display: block; margin-top:10px; display:none;">
+            <div id="I" class="col-lg-12">
+                <h4>Formulario de información de contacto</h4>
+                <form>
+                    <div class="form-group" align="center">
+                        <label for="NumeroTel">Teléfono</label>
+                        <input type="number" class="form-control" id="NumeroTel" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;">
+                    </div>
+                    <div class="form-group" align="center">
+                        <label for="TipoTelefono">Tipo teléfono</label>
+                        <select class="form-control" id="TipoTelefono">
+                            <option>Default</option>
+                        </select>
+                    </div>
+                    <div class="form-group" align="center" style="display: none">
+                        <label for="EstadoTelefono">Estado</label>
+                        <input class="form-check-input" type="checkbox" id="EstadoTelefono">
+                        <label class="form-check-label" for="EstadoTelefono">Activo</label>
+                    </div>
+                    <div class="form-group" align="center">
+                        <button type="button" class="btn btn-success" onclick="AgregarNuevoTelefono()">Agregar</button>
+                        <button type="button" class="btn btn-default" onclick="ContinuarTelefono()">Continuar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="InfoAsistente" class="col-lg-12" style="display: none; margin-top:10px;">
+            <h4>Formulario de registro de asistentes</h4>
+            <form>
+                <div class="form-group" align="center">
+                    <label for="TipoAsistente">Tipo asistente</label>
+                    <select class="form-control" id="TipoAsistente">
+                        <option>Default</option>
+                    </select>
+                </div>
+                <div class="form-group" align="center" hidden>
+                    <label for="FechIngreso">Ingreso</label>
+                    <input class="form-control" type="date" id="FechIngreso" name="trip-start"
+                           value="2018-07-22"
+                           min="1990-01-01" max="2999-12-31">
+                </div>
+                <div class="form-group" align="center">
+                    <label for="FechEntrada">Entrada</label>
+                    <input class="form-control" type="time" id="FechEntrada" value="08:00" min="05:00" max="20:00" name="trip-start" />
+                </div>
+                <div class="form-group" align="center">
+                    <label for="FechSalida">Salida</label>
+                    <input class="form-control" type="time" id="FechSalida" value="17:00" min="05:00" max="20:00" name="trip-start" />
+                </div>
+                <div class="form-group" align="center" style="display: none">
+                    <label for="EstadoAsistente">Estado: </label>
+                    <input class="form-check-input" type="checkbox" id="EstadoAsistente">
+                    <label class="form-check-label" for="EstadoAsistente">Activo</label>
+                </div>
+                <div class="form-group" align="center">
+                    <button type="button" class="btn btn-success" onclick="GuardarAsistente()">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="MensajeAlerta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Atención</h5>
+            </div>
+            <div class="modal-body">
+                <p id="MensajeModal"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Aceptar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Cargando" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" align="center">
+                <img src="~/Images/loading.gif" alt="Cargando" style="width:100px; height:100px;" />
+                <p id="MensajeModal">Procesando...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/Funciones/Asistentes.js"></script>
