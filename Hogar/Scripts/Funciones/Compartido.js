@@ -22,6 +22,19 @@ function Request(Query, Metodo) {
                         case "ValidarUsuario":
                             window.location.href = "/Home/Inicio";
                             break;
+                        case "Update":
+                            var Mensaje = ""
+
+                            if (Query.includes("Estado")) {
+                                Mensaje = "Se ha eliminado el registro correctamente.";
+                            } else {
+                                Mensaje = "Se ha actualizado el registro correctamente.";
+                            }
+
+                            MostrarModal(Mensaje);
+
+                            setTimeout(function () { location.reload(); }, 1000);  
+                            break;
                         case "CerrarSesion":
                             window.location.href = "/Home/IniciarSesion";
                             break;
@@ -29,7 +42,35 @@ function Request(Query, Metodo) {
                             for (var i = 0; i < Respuesta.ComboxOptions.length; i++) {                                
                                 $("#" + Tablax).append(Respuesta.ComboxOptions[i]);
                             }
-                            CargarDatatable(Tablax);
+
+                            if (Query.includes("select nm.idNumTelefono, nm.Telefono, tt.Nombre from NumTelefono")) {
+                                $('#TablaDetTelefono').DataTable({
+                                    "paging": true,
+                                    "lengthChange": true,
+                                    "searching": true,
+                                    "ordering": true,
+                                    "info": true,
+                                    "autoWidth": true,
+                                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Mostrar Todo"]],
+                                    "language": idioma
+                                });
+                            }
+                            else if (Query.includes("select a.idArticulos, a.Descripcion, ta.Nombre, a.Cantidad from Articulos")) {
+                                $('#TablaDetArticulos').DataTable({
+                                    "paging": true,
+                                    "lengthChange": true,
+                                    "searching": true,
+                                    "ordering": true,
+                                    "info": true,
+                                    "autoWidth": true,
+                                    "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Mostrar Todo"]],
+                                    "language": idioma
+                                });
+                            }
+                            else {
+                                CargarDatatable(Tablax);
+                            }
+                            
                             break;
                         case "LlenarCombos":
                             if (Combox != "") {
@@ -85,7 +126,7 @@ function Request(Query, Metodo) {
                                     MostrarModal(`Se agrego la relación correctamente.`);
                                     setTimeout(function () { location.reload(); }, 1000);                                    
                                 }
-                                if (Query.includes("TipoArticulo")) {
+                                if (Query.includes("SELECT NOMBRE FROM TipoArticulo WHERE NOMBRE LIKE")) {
                                     MostrarModal(`Se agrego el registro: '${txtDescripcion.value}' correctamente.`);
                                     txtDescripcion.value = "";
                                     blockCampos(false, "AgregarNuevoRegistro");
@@ -296,7 +337,7 @@ function LlenarTabla(tabla) {
     var Consulta = "";
     switch (tabla) {
         case "TablaPaciente":
-            Consulta = "SELECT r.idResidente, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, r.Nacimiento, r.Ingreso FROM Residente r INNER JOIN Persona p on r.Persona_idPersona = p.idPersona";
+            Consulta = "SELECT r.idResidente, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, r.Nacimiento, r.Ingreso, r.Persona_idPersona FROM Residente r INNER JOIN Persona p on r.Persona_idPersona = p.idPersona where r.Estado = true";
             break;
         case "TablaParientes":
             Consulta = "select v.IdVisitante, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, t.Telefono from Visitante v INNER JOIN Persona p on v.Persona_idPersona = p.idPersona INNER JOIN NumTelefono t on p.idPersona = t.Persona_idPersona where v.Estado = true and t.Estado = true";
@@ -318,6 +359,12 @@ function LlenarTabla(tabla) {
             break;
         case "TablaVisitas":
             Consulta = "select b.idVisita, concat(day(b.Fecha), '-', month(b.Fecha), '-', year(b.Fecha)) as Fecha, b.Hora, concat(p.Nombre, ' ', p.Apellido1, ' ', p.Apellido2) as Residente, concat(pr.Nombre, ' ', pr.Apellido1, ' ', pr.Apellido2) as Visitante from Bitacora b inner join Residente r on b.idResidente =  r.idResidente INNER JOIN Persona p on r.Persona_idPersona = p.idPersona inner join Visitante v on b.idVisitante =  v.idVisitante INNER JOIN Persona pr on v.Persona_idPersona = pr.idPersona where b.Estado = true";
+            break;
+        case "TablaDetTelefono":
+            Consulta = `select nm.idNumTelefono, nm.Telefono, tt.Nombre from NumTelefono nm inner join TipoTelefono tt on tt.idTipoTelefono = nm.TipoTelefono_idTipoTelefono where nm.Estado = true and Persona_idPersona = ${idPersonaDet}`;
+            break;
+        case "TablaDetArticulos":
+            Consulta = `select a.idArticulos, a.Descripcion, ta.Nombre, a.Cantidad from Articulos a inner join TipoArticulo ta on ta.idTipoArticulo = a.TipoArticulo_idTipoArticulo inner join ExpedienteGeneral eg on eg.idExpGen = a.ExpedienteGeneral_idExpGen inner join Residente r on r.idResidente = eg.Pacientes_idPacientes and eg.idExpGen = a.ExpedienteGeneral_idExpGen where a.Estado = true and r.idResidente = ${idResidenteDet}`;
             break;
         default:
             break;
@@ -365,7 +412,7 @@ var idioma =
     "sProcessing": "Procesando...",
     "sLengthMenu": "Mostrar _MENU_ registros",
     "sZeroRecords": "No se encontraron resultados",
-    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+    "sEmptyTable": "Ningún dato disponible en esta tabla",
     "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
     "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
     "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
@@ -423,4 +470,39 @@ function MostrarModalCargando() {
 
 function RecargarPagina() {
     location.reload();
+}
+
+var IdRegistro = 0;
+var NombreTabla = "";
+var NombreColumna = "";
+
+function ActualizarEstado(id, tabla, columna) {
+    IdRegistro = id;
+    NombreTabla = tabla;
+    NombreColumna = columna;
+
+    console.log(id + " " + tabla + " " + columna);
+
+    $('#Eliminar').modal(
+        {
+            backdrop: 'static',
+            keyboard: false
+        }
+    );
+}
+
+function Cancelar() {
+    $('#Eliminar').modal('hide');
+}
+
+function Eliminar() {
+    if (IdRegistro != 0 && NombreTabla != "" && NombreColumna != "")
+    {
+        MostrarModalCargando();
+        var Consulta = `UPDATE ${NombreTabla} SET Estado = false where ${NombreColumna} = ${IdRegistro}`;
+        Request(Consulta, "Update");
+    }
+    else {
+        MostrarModal("Ha ocurrido un problema al intentar eliminar el registro.");
+    }
 }

@@ -348,3 +348,49 @@ function OcultarFormularios() {
     EdicionRoles.style.display = "none"
     Titulo.innerHTML = "Configuración del sistema";
 }
+
+var PanelModificar = document.getElementById('PanelEdicionUsuario');
+var NombreUsuario = document.getElementById('txtUsuario');
+var NuevaContra = document.getElementById('txtContra');
+var NuevoRol = document.getElementById('cmbRol');
+
+var IdUsuarioMod = 0;
+
+function ActualizarUsuario(id, nombre) {
+    RequestCombox("SELECT idTipoRol, Nombre FROM TipoRol WHERE Estado = true", "cmbRol")
+    IdUsuarioMod = id;
+    PanelModificar.style.display = "block"
+    NombreUsuario.value = nombre;
+}
+
+function ActualizarCancelar() {
+    IdUsuarioMod = 0;
+    PanelModificar.style.display = "none"
+    NombreUsuario.value = "";
+    NuevoRol.selectedIndex = 0;
+}
+
+function GuardarCambios() {
+    var strContra = NuevaContra.value;
+    var indexRol = NuevoRol.value;
+
+    if (strContra.length != 0 || indexRol != 0) {
+        MostrarModalCargando();
+
+        var Consulta = "";
+        if (strContra.length > 0 && indexRol == 0) {
+            Consulta = `update Usuario set Contrasena = '${strContra}' where idUsuarios = ${IdUsuarioMod}`;
+        }
+        if (strContra.length == 0 && indexRol > 0) {
+            Consulta = `update Usuario set TipoRol_idTipoRol = ${indexRol} where idUsuarios = ${IdUsuarioMod}`;
+        }
+        if (strContra.length > 0 && indexRol > 0) {
+            Consulta = `update Usuario set Contrasena = '${strContra}', TipoRol_idTipoRol = ${indexRol} where idUsuarios = ${IdUsuarioMod}`;
+        }
+
+        Request(Consulta, "Update");
+    }
+    else {
+        MostrarModal("Debes de ingresar una nueva contraseña o seleccionar un nuevo rol.");
+    }
+}

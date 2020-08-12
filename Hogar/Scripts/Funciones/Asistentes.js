@@ -149,12 +149,12 @@ function AgregarAsistente(num, name) {
         //AGREGAR JQUERY DATATABLE
         var Tbl = document.getElementById('TablaAsig');
         if (Tbl.rows.length == 1) {
-            $("#TablaAsig").append(`<tr><td>${num}</td><td>${name}</td><td><button type='button' class='btn btn-danger' onclick='Asignado()'>Eliminar</button></td></tr>`);
+            $("#TablaAsig").append(`<tr><td>${num}</td><td>${name}</td></tr>`);
             CargarDatatable('TablaAsig');
         }
         else {
             CurrentTable.destroy();
-            $("#TablaAsig").append(`<tr><td>${num}</td><td>${name}</td><td><button type='button' class='btn btn-danger' onclick='Asignado()'>Eliminar</button></td></tr>`);
+            $("#TablaAsig").append(`<tr><td>${num}</td><td>${name}</td></tr>`);
             CargarDatatable('TablaAsig');
         }
         Agregados.push(name);

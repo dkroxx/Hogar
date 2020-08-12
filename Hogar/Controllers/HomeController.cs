@@ -144,6 +144,23 @@ namespace Hogar.Controllers
         #region MetodosHttp
 
         [HttpPost]
+        public JsonResult Update(string Query)
+        {
+            string JsonResponse = string.Empty;
+            try
+            {
+                ConsultarSql(Query, "");
+                JsonResponse = "{\"ErrorCode\":\"00\",\"Mensaje\":\"" + "Transacción exitosa." + "\"}";
+            }
+            catch (Exception ex)
+            {
+                JsonResponse = "{\"ErrorCode\":\"99\",\"Error\":\"" + ex.Message + "\"}";
+            }
+
+            return Json(JsonResponse);
+        }
+
+        [HttpPost]
         public JsonResult LlenarTabla(string Query)
         {
             Combox obj = new Combox();
@@ -401,28 +418,40 @@ namespace Hogar.Controllers
                             var Row = string.Empty;
 
                             if (Query.Contains("FROM Residente"))
-                            {
-                                Row = string.Format(msj.TablaPaciente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6));
+                            {                                
+                                Row = string.Format(msj.TablaPaciente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(0), "Residente", "idResidente");
                             }
                             if (Query.Contains("from Visitante"))
                             {
-                                Row = string.Format(msj.TablaPariente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5));
+                                Row = string.Format(msj.TablaPariente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(0), "Visitante", "idVisitante");
                             }
                             if (Query.Contains("select a.idAsistente, p.Cedula, p.Nombre, p.Apellido1, p.Apellido2, ta.Nombre, a.Entrada, a.Salida from Asistente a"))
                             {
-                                Row = string.Format(msj.TablaAsistente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7));
+                                Row = string.Format(msj.TablaAsistente, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(7), reader.GetString(0), "Asistente", "idAsistente");
                             }
                             if (Query.Contains("from Usuario"))
                             {
-                                Row = string.Format(msj.TablaUsuario, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6));
+                                Row = string.Format(msj.TablaUsuario, reader.GetString(0), reader.GetString(1), reader.GetString(2) + " " + reader.GetString(3) + " " + reader.GetString(4), reader.GetString(5), reader.GetString(6), reader.GetString(0), reader.GetString(5), reader.GetString(0), "Usuario", "idUsuarios");
                             }
                             if (Query.Contains("from TipoRol"))
                             {
-                                Row = string.Format(msj.TablaRoles, reader.GetString(0), reader.GetString(1), ConvertirString(reader.GetString(2)), ConvertirString(reader.GetString(3)), ConvertirString(reader.GetString(4)), ConvertirString(reader.GetString(5)));
+                                Row = string.Format(msj.TablaRoles, reader.GetString(0), reader.GetString(1), ConvertirString(reader.GetString(2)), ConvertirString(reader.GetString(3)), ConvertirString(reader.GetString(4)), ConvertirString(reader.GetString(5)), reader.GetString(0), "TipoRol", "idTipoRol");
                             }
-                            if (Query.Contains("from TipoArticulo") || Query.Contains("from TipoAsistente") || Query.Contains("from TipoParentesco") || Query.Contains("from TipoTelefono"))
+                            if (Query.Contains("from TipoArticulo"))
                             {
-                                Row = string.Format(msj.TablaGeneral, reader.GetString(0), reader.GetString(1));
+                                Row = string.Format(msj.TablaGeneral, reader.GetString(0), reader.GetString(1), reader.GetString(0), "TipoArticulo", "idTipoArticulo");
+                            }
+                            if (Query.Contains("from TipoAsistente"))
+                            {
+                                Row = string.Format(msj.TablaGeneral, reader.GetString(0), reader.GetString(1), reader.GetString(0), "TipoAsistente", "idTipoAsistente");
+                            }
+                            if (Query.Contains("from TipoParentesco"))
+                            {
+                                Row = string.Format(msj.TablaGeneral, reader.GetString(0), reader.GetString(1), reader.GetString(0), "TipoParentesco", "idTipoParentesco");
+                            }
+                            if (Query.Contains("from TipoTelefono"))
+                            {
+                                Row = string.Format(msj.TablaGeneral, reader.GetString(0), reader.GetString(1), reader.GetString(0), "TipoTelefono", "idTipoTelefono");
                             }
                             if (Query.Contains("from Residente r inner join Persona p"))
                             {
@@ -434,7 +463,16 @@ namespace Hogar.Controllers
                             }
                             if (Query.Contains("select b.idVisita, concat(day(b.Fecha), '-', month(b.Fecha), '-', year(b.Fecha)) as Fecha, b.Hora"))
                             {
-                                Row = string.Format(msj.TablaVisita, reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4));
+                                Row = string.Format(msj.TablaVisita, reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(4), reader.GetString(0), "Bitacora", "idVisita");
+                            }
+
+                            if (Query.Contains("select nm.idNumTelefono, nm.Telefono, tt.Nombre from NumTelefono"))
+                            {
+                                Row = string.Format(msj.TablaDetalleTelefono, reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(0), "NumTelefono", "idNumTelefono");
+                            }
+                            if (Query.Contains("select a.idArticulos, a.Descripcion, ta.Nombre, a.Cantidad from Articulos"))
+                            {
+                                Row = string.Format(msj.TablaDetalleArticulo, reader.GetString(0), reader.GetString(1), reader.GetString(2), reader.GetString(3), reader.GetString(0), "Articulos", "idArticulos");
                             }
 
                             cmbOptions.Add(Row);
@@ -484,15 +522,17 @@ namespace Hogar.Controllers
         public string ErrorRegExiste = "El valor que se ingresó ya se encuentra registrado.";
         public string ErrorExpediente = "Ha ocurrido un problema al guardar el expediente.";
         public string OptionCombo = "<option value=\"{0}\">{1}</option>";
-        public string TablaPaciente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Nacimiento'>{3}</td><td data-label='Ingreso'>{4}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick=''>Modificar</button></td></tr>";
-        public string TablaPariente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Telefono'>{3}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick=''>Modificar</button></td></tr>";
-        public string TablaAsistente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Tipo'>{3}</td><td data-label='Entrada'>{4}</td><td data-label='Salida'>{5}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick='ProcesosAsignar()'>Seleccionar</button></td></tr>";
-        public string TablaUsuario = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Usuario'>{3}</td><td data-label='Rol'>{4}</td><td data-label='Acciones'><button type='button' class='btn btn-default' onclick=''>Modificar</button></td><td data-label='Acciones'><button type='button' class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
-        public string TablaRoles = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Residentes'>{2}</td><td data-label='Asistentes'>{3}</td><td data-label='Visitas'>{4}</td><td data-label='Configuraciones'>{5}</td><td data-label='Accion'><button type='button' class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
-        public string TablaGeneral = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Acciones'><button type='button'class='btn btn-danger' onclick=''>Eliminar</button></td></tr>";
+        public string TablaPaciente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Nacimiento'>{3}</td><td data-label='Ingreso'>{4}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick='MostrarDetallesResidente({5}, {6}, \"{7}\", \"{8}\", \"{9}\", \"{10}\")'>Ver detalles</button></td><td data-label='Acciones'><button type='button' class='btn btn-danger' onclick='ActualizarEstado({11}, \"{12}\", \"{13}\")'>Eliminar</button></td></tr>";
+        public string TablaPariente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Telefono'>{3}</td><td data-label='Acciones'><button type='button' class='btn btn-danger' onclick='ActualizarEstado({4}, \"{5}\", \"{6}\")'>Eliminar</button></td></tr>";
+        public string TablaAsistente = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Tipo'>{3}</td><td data-label='Entrada'>{4}</td><td data-label='Salida'>{5}</td><td data-label='Acciones'><button type='button' class='btn btn-danger' onclick='ActualizarEstado({6}, \"{7}\", \"{8}\")'>Eliminar</button></td></tr>";
+        public string TablaUsuario = "<tr><td data-label='ID'>{0}</td><td data-label='Cedula'>{1}</td><td data-label='Nombre completo'>{2}</td><td data-label='Usuario'>{3}</td><td data-label='Rol'>{4}</td><td data-label='Acciones'><button type='button' class='btn btn-success' onclick='ActualizarUsuario({5}, \"{6}\")'>Modificar</button></td><td data-label='Acciones'><button type='button' class='btn btn-danger' onclick='ActualizarEstado({7}, \"{8}\", \"{9}\")'>Eliminar</button></td></tr>";
+        public string TablaRoles = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Residentes'>{2}</td><td data-label='Asistentes'>{3}</td><td data-label='Visitas'>{4}</td><td data-label='Configuraciones'>{5}</td><td data-label='Accion'><button type='button' class='btn btn-danger' onclick='ActualizarEstado({6}, \"{7}\", \"{8}\")'>Eliminar</button></td></tr>";
+        public string TablaGeneral = "<tr><td data-label='ID'>{0}</td><td data-label='Descripción'>{1}</td><td data-label='Acciones'><button type='button'class='btn btn-danger' onclick='ActualizarEstado({2}, \"{3}\", \"{4}\")'>Eliminar</button></td></tr>";
         public string TablaResidente = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td><button type='button' class='btn btn-success' onclick='ProcesosAsignar({3}, \"{4}\")'>Seleccionar</button></td></tr>";
         public string TablaAsignar = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td><button type='button' class='btn btn-success' onclick='AgregarAsistente({3}, \"{4}\")'>Asignar</button></td></tr>";        
-        public string TablaVisita = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td><button type='button' class='btn btn-danger' onclick=''>Cancelar</button></td></tr>";
+        public string TablaVisita = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td><td><button type='button' class='btn btn-danger' onclick='ActualizarEstado({5}, \"{6}\", \"{7}\")'>Eliminar</button></td></tr>";
+        public string TablaDetalleTelefono = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td><button type='button' class='btn btn-danger' onclick='ActualizarEstado({3}, \"{4}\", \"{5}\")'>Eliminar</button></td></tr>";
+        public string TablaDetalleArticulo = "<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td><button type='button' class='btn btn-danger' onclick='ActualizarEstado({4}, \"{5}\", \"{6}\")'>Eliminar</button></td></tr>";
     }
 
     public class Combox

@@ -289,6 +289,7 @@ function OcultarTodo() {
     InfoExpediente.style.display = "none";
     InfoArticulo.style.display = "none";
     InfoVisitante.style.display = "none";
+    document.getElementById('Detalles').display = "none";
 }
 
 function clickPacientes() {
@@ -327,4 +328,23 @@ function QuitarClase() {
 
 function CambiarTitulo(Texto) {
     Titulo.innerHTML = Texto
+}
+
+var idResidenteDet = 0;
+var idPersonaDet = 0;
+
+function MostrarDetallesResidente(idPersona, idResidente, cedula, nombre, nacimiento, ingreso) {
+    MostrarModalCargando();    
+    idResidenteDet = idResidente;
+    idPersonaDet = idPersona;
+    document.getElementById('Principal').style.display = "none";    
+    document.getElementById('Detalles').style.display = "block";    
+    document.getElementById('detCedula').value = cedula;
+    document.getElementById('detNombre').value = nombre;
+    document.getElementById('detNacimiento').value = nacimiento;
+    document.getElementById('detIngreso').value = ingreso;
+
+    LlenarTabla("TablaDetTelefono");
+
+    setTimeout(function () { LlenarTabla("TablaDetArticulos"); }, 1000);      
 }

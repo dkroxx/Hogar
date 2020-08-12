@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Asistentes";
+    ViewBag.Title = "Asistentes - Residencial Otoya";
 }
 
 <h3 id="TituloConfig">Asistentes / Lista de asistentes</h3>
@@ -77,7 +77,6 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Nombre completo</th>
-                            <th scope="col">Acción</th>
                         </tr>
                     </thead>
                 </table>
@@ -205,6 +204,23 @@
             <div class="modal-body" align="center">
                 <img src="~/Images/loading.gif" alt="Cargando" style="width:100px; height:100px;" />
                 <p id="MensajeModal">Procesando...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="Eliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Atención</h5>
+            </div>
+            <div class="modal-body">
+                <p>¿Esta seguro que quiere eliminar este registro?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="Cancelar()">Cancelar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="Eliminar()">Eliminar</button>
             </div>
         </div>
     </div>
